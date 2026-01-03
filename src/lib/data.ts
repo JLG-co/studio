@@ -1,4 +1,4 @@
-import type { Lesson, Article, ExerciseSet } from './types';
+import type { Lesson, Article, ExerciseSet, OlympiadQuestion } from './types';
 
 const commonStyles = `
   <style>
@@ -49,6 +49,13 @@ const commonStyles = `
     .content-container img {
       border-radius: 0.5rem;
       margin: 1.5rem 0;
+    }
+    .content-container .solution-box {
+      border: 1px solid hsl(var(--primary) / 0.5);
+      background-color: hsl(var(--primary) / 0.1);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
     }
   </style>
   <div class="content-container">
@@ -490,5 +497,91 @@ export const exerciseSets: ExerciseSet[] = [
         explanation: 'صورة النقطة B هي B\'(x\', y\') حيث OB\' = 2 * OB. إذن x\'=2*3=6 و y\'=2*4=8. فتكون B\'(6, 8).',
       },
     ],
+  },
+];
+
+export const olympiadQuestions: OlympiadQuestion[] = [
+  {
+    slug: 'functional-equation-1',
+    title: 'معادلة دالية أساسية',
+    description: 'أوجد جميع الدوال التي تحقق شرطًا معينًا على جميع الأعداد الحقيقية.',
+    difficulty: 'متوسط',
+    tags: ['معادلات دالية', 'جبر'],
+    problemStatement: `
+      ${commonStyles}
+      <p>أوجد جميع الدوال <code>f: ℝ → ℝ</code> التي تحقق المعادلة التالية لجميع <code>x, y ∈ ℝ</code>:</p>
+      <p class="font-mono text-center text-lg bg-gray-900/50 p-4 rounded-md">f(x + y) = f(x) + f(y)</p>
+      <p>هذه تعرف بمعادلة كوشي الدالية.</p>
+      </div>
+    `,
+    solution: `
+      ${commonStyles}
+      <div class="solution-box">
+      <p>هذه هي معادلة كوشي الدالية. الحلول المستمرة هي فقط الدوال الخطية من الشكل <code>f(x) = cx</code>.</p>
+      <ol>
+        <li><b>الخطوة 1: الأعداد الصحيحة.</b>
+           بتعويض y=x, نحصل على f(2x) = 2f(x). بالاستقراء، f(nx) = nf(x) لجميع الأعداد الطبيعية n.
+           أيضًا، f(x) = f(x+0) = f(x) + f(0)، مما يعني f(0)=0.
+           ثم f(0) = f(x + (-x)) = f(x) + f(-x)، لذا f(-x) = -f(x).
+           إذًا f(nx) = nf(x) لجميع الأعداد الصحيحة n.
+        </li>
+        <li><b>الخطوة 2: الأعداد الكسرية.</b>
+           ليكن x = p/q عددًا كسريًا.
+           لدينا f(q * (p/q)x) = q * f((p/q)x).
+           ولدينا أيضًا f(px) = p * f(x).
+           إذن q * f((p/q)x) = p * f(x).
+           f((p/q)x) = (p/q) * f(x).
+           بتعويض x=1، نحصل على f(r) = r * f(1) لجميع الأعداد الكسرية r.
+           ليكن c = f(1). إذن f(r) = cr.
+        </li>
+        <li><b>الخطوة 3: الأعداد الحقيقية (بافتراض الاستمرارية).</b>
+           لأي عدد حقيقي x، يمكننا أخذ متتالية من الأعداد الكسرية (q_n) تتقارب إلى x.
+           بما أن f مستمرة، فإن lim(n→∞) f(q_n) = f(lim(n→∞) q_n) = f(x).
+           ولكن f(q_n) = c*q_n، لذا lim(n→∞) f(q_n) = lim(n→∞) c*q_n = c*x.
+           إذًا، f(x) = cx لجميع الأعداد الحقيقية x.
+        </li>
+      </ol>
+      <p><b>ملاحظة:</b> توجد حلول أخرى غير مستمرة، لكنها معقدة وتتطلب استخدام أساس هاميل، وهي خارج نطاق معظم المسابقات.</p>
+      </div>
+      </div>
+    `,
+  },
+  {
+    slug: 'inequality-1',
+    title: 'متراجحة أساسية',
+    description: 'أثبت متراجحة AM-GM لحالتين.',
+    difficulty: 'صعب',
+    tags: ['متراجحات', 'جبر'],
+    problemStatement: `
+      ${commonStyles}
+      <p>ليكن <code>a, b</code> عددين حقيقيين موجبين. أثبت أن:</p>
+      <p class="font-mono text-center text-lg bg-gray-900/50 p-4 rounded-md">(a + b) / 2 ≥ √(ab)</p>
+      <p>هذه هي متراجحة الوسط الحسابي-الوسط الهندسي (AM-GM).</p>
+      </div>
+    `,
+    solution: `
+      ${commonStyles}
+      <div class="solution-box">
+      <p>لإثبات المتراجحة، نبدأ من حقيقة أن مربع أي عدد حقيقي هو غير سالب.</p>
+      <ol>
+        <li>ننظر إلى مربع الفرق بين جذري a و b:
+          <p><code>(√a - √b)² ≥ 0</code></p>
+        </li>
+        <li>نقوم بفك القوس:
+          <p><code>(√a)² - 2√a√b + (√b)² ≥ 0</code></p>
+          <p><code>a - 2√(ab) + b ≥ 0</code></p>
+        </li>
+        <li>نضيف <code>2√(ab)</code> إلى طرفي المتراجحة:
+          <p><code>a + b ≥ 2√(ab)</code></p>
+        </li>
+        <li>نقسم الطرفين على 2:
+          <p><code>(a + b) / 2 ≥ √(ab)</code></p>
+        </li>
+      </ol>
+      <p>تتحقق المساواة عندما يكون <code>(√a - √b)² = 0</code>, أي عندما <code>√a = √b</code>, مما يعني <code>a = b</code>.</p>
+      <p>وهذا يثبت المطلوب.</p>
+      </div>
+      </div>
+    `,
   },
 ];

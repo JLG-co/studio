@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveRight, PencilRuler } from 'lucide-react';
+import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveRight, PencilRuler, Trophy } from 'lucide-react';
 import Link from 'next/link';
 
 const features = [
@@ -15,6 +15,12 @@ const features = [
     title: "تمارين تطبيقية",
     description: "مجموعات من التمارين لاختبار فهمك وتطبيق ما تعلمته.",
     href: "/exercises",
+  },
+  {
+    icon: <Trophy className="w-8 h-8 text-primary" />,
+    title: 'مسائل أولمبياد',
+    description: 'تحدَّ نفسك مع مسائل صعبة من مسابقات الرياضيات لتعزيز مهاراتك.',
+    href: '/olympiad',
   },
   {
     icon: <FlaskConical className="w-8 h-8 text-primary" />,

@@ -30,3 +30,13 @@ export interface ExerciseSet {
   lessonSlug: string;
   questions: Question[];
 }
+
+export interface OlympiadQuestion {
+  slug: string;
+  title: string;
+  description: string;
+  problemStatement: string;
+  solution: string;
+  difficulty: 'متوسط' | 'صعب' | 'صعب جداً';
+  tags: string[];
+}

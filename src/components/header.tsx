@@ -12,6 +12,7 @@ const navLinks = [
   { href: '/', label: 'الرئيسية' },
   { href: '/lessons', label: 'الدروس' },
   { href: '/exercises', label: 'التمارين' },
+  { href: '/olympiad', label: 'الأولمبياد' },
   { href: '/lab', label: 'المختبر' },
   { href: '/articles', label: 'المقالات' },
   { href: '/adaptive-learning', label: 'التعلم التكيفي' },
