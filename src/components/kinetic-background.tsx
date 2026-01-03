@@ -6,10 +6,8 @@ const symbols = ['+', '−', '×', '÷', '√', '∫', '∑', '∞', 'π', 'Δ',
 
 const KineticBackground = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
     const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({ x: event.clientX, y: event.clientY });
     };
@@ -44,7 +42,13 @@ const KineticBackground = () => {
     });
   }, []);
 
-  if (!isMounted) {
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) {
     return null;
   }
 
