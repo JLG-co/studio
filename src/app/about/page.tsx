@@ -33,14 +33,15 @@ const AboutPage = () => {
       <Card className={glassCardClasses}>
         <CardContent className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="md:col-span-1 flex justify-center">
-            <Image
-              src={profileImageUrl}
-              alt="Abdeldjalil Gouneiber"
-              data-ai-hint="portrait man"
-              width={250}
-              height={250}
-              className="rounded-full border-4 border-primary/50 object-cover shadow-lg aspect-square"
-            />
+            <div className="relative w-[250px] h-[250px]">
+              <Image
+                src={profileImageUrl}
+                alt="Abdeldjalil Gouneiber"
+                data-ai-hint="portrait man"
+                fill
+                className="rounded-2xl border-4 border-primary/50 object-cover shadow-lg"
+              />
+            </div>
           </div>
           <div className="md:col-span-2 space-y-6 text-center md:text-right">
             <h2 className="text-4xl font-headline font-bold text-primary">
