@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import KineticBackground from '@/components/kinetic-background';
 import Footer from '@/components/footer';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'Math Companion Pro',
@@ -27,15 +28,17 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased min-h-screen')}>
-        <KineticBackground />
-        <div className="relative z-10 flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow container mx-auto px-4 py-8">
-            {children}
-          </main>
-          <Footer />
-        </div>
-        <Toaster />
+        <FirebaseClientProvider>
+          <KineticBackground />
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow container mx-auto px-4 py-8">
+              {children}
+            </main>
+            <Footer />
+          </div>
+          <Toaster />
+        </FirebaseClientProvider>
       </body>
     </html>
   );
