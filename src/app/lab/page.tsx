@@ -19,14 +19,14 @@ const LabPage = () => {
         subtitle="مجموعة من الأدوات التفاعلية لمساعدتك على تصور وحل المشكلات الرياضية المعقدة."
       />
       <Tabs defaultValue="chatbot" className="w-full">
-        <TabsList className="grid w-full grid-cols-7 bg-white/5 border border-cyan-300/10">
-          <TabsTrigger value="chatbot" className="font-headline">رفيقك الذكي</TabsTrigger>
-          <TabsTrigger value="grapher" className="font-headline">راسم الدوال</TabsTrigger>
-          <TabsTrigger value="solver" className="font-headline">حل معادلة الدرجة الثانية</TabsTrigger>
-          <TabsTrigger value="barycenter" className="font-headline">حساب المرجح</TabsTrigger>
-          <TabsTrigger value="properties" className="font-headline">خواص الدوال</TabsTrigger>
-          <TabsTrigger value="lesson-plan" className="font-headline">مولد الخطط</TabsTrigger>
-          <TabsTrigger value="summarizer" className="font-headline">ملخص المقالات</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 bg-white/5 border border-cyan-300/10 h-auto">
+          <TabsTrigger value="chatbot" className="font-headline py-2">رفيقك الذكي</TabsTrigger>
+          <TabsTrigger value="grapher" className="font-headline py-2">راسم الدوال</TabsTrigger>
+          <TabsTrigger value="solver" className="font-headline py-2">حل معادلة الدرجة الثانية</TabsTrigger>
+          <TabsTrigger value="barycenter" className="font-headline py-2">حساب المرجح</TabsTrigger>
+          <TabsTrigger value="properties" className="font-headline py-2">خواص الدوال</TabsTrigger>
+          <TabsTrigger value="lesson-plan" className="font-headline py-2">مولد الخطط</TabsTrigger>
+          <TabsTrigger value="summarizer" className="font-headline py-2">ملخص المقالات</TabsTrigger>
         </TabsList>
         <TabsContent value="chatbot">
           <div className={glassCardClasses}>
