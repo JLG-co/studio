@@ -1,3 +1,4 @@
+
 import type { Lesson, Article, ExerciseSet, OlympiadQuestion } from './types';
 
 const commonStyles = `
@@ -580,6 +581,101 @@ export const olympiadQuestions: OlympiadQuestion[] = [
       </ol>
       <p>تتحقق المساواة عندما يكون <code>(√a - √b)² = 0</code>, أي عندما <code>√a = √b</code>, مما يعني <code>a = b</code>.</p>
       <p>وهذا يثبت المطلوب.</p>
+      </div>
+      </div>
+    `,
+  },
+  {
+    slug: 'number-theory-divisibility',
+    title: 'مسألة قابلية القسمة',
+    description: 'أوجد جميع الأعداد الصحيحة الموجبة التي تحقق خاصية معينة.',
+    difficulty: 'صعب جداً',
+    tags: ['نظرية الأعداد', 'جبر'],
+    problemStatement: `
+      ${commonStyles}
+      <p>أوجد جميع الأعداد الصحيحة الموجبة <code>n</code> التي يكون من أجلها <code>n * 2^n + 1</code> قابلاً للقسمة على 3.</p>
+      </div>
+    `,
+    solution: `
+      ${commonStyles}
+      <div class="solution-box">
+      <p>علينا إيجاد قيم <code>n</code> حيث <code>n * 2^n + 1 ≡ 0 (mod 3)</code>.</p>
+      <p>سندرس بواقي قسمة <code>n</code> على 2، وبواقي قسمة <code>2^n</code> على 3.</p>
+      <p>بالنسبة لـ <code>2^n mod 3</code>:</p>
+      <ul>
+        <li>إذا كان <code>n</code> زوجيًا، أي <code>n = 2k</code>، فإن <code>2^n = 2^(2k) = (2^2)^k = 4^k ≡ 1^k ≡ 1 (mod 3)</code>.</li>
+        <li>إذا كان <code>n</code> فرديًا، أي <code>n = 2k+1</code>، فإن <code>2^n = 2^(2k+1) = 2 * 4^k ≡ 2 * 1^k ≡ 2 (mod 3)</code>.
+        ويمكن كتابة <code>2 ≡ -1 (mod 3)</code>.</li>
+      </ul>
+      <p>لدينا حالتان رئيسيتان:</p>
+      <p><b>الحالة 1: n عدد زوجي.</b></p>
+      <p>في هذه الحالة، <code>n * 2^n + 1 ≡ n * 1 + 1 ≡ n + 1 (mod 3)</code>.</p>
+      <p>نريد أن يكون <code>n + 1 ≡ 0 (mod 3)</code>، مما يعني <code>n ≡ -1 ≡ 2 (mod 3)</code>.</p>
+      <p>إذن، في هذه الحالة، يجب أن يكون <code>n</code> عددًا زوجيًا وباقي قسمته على 3 هو 2.</p>
+      
+      <p><b>الحالة 2: n عدد فردي.</b></p>
+      <p>في هذه الحالة، <code>n * 2^n + 1 ≡ n * 2 + 1 ≡ 2n + 1 (mod 3)</code>.</p>
+      <p>نريد أن يكون <code>2n + 1 ≡ 0 (mod 3)</code>، مما يعني <code>2n ≡ -1 ≡ 2 (mod 3)</code>.</p>
+      <p>بضرب الطرفين في 2 (وهو المعكوس الضربي لـ 2 في Z₃)، نحصل على <code>4n ≡ 4 (mod 3)</code>، وهو ما يكافئ <code>n ≡ 1 (mod 3)</code>.</p>
+      <p>إذن، في هذه الحالة، يجب أن يكون <code>n</code> عددًا فرديًا وباقي قسمته على 3 هو 1.</p>
+      
+      <p><b>الخلاصة:</b></p>
+      <p>الشرط يتحقق لجميع الأعداد الصحيحة الموجبة <code>n</code> التي هي إما:</p>
+      <ul>
+        <li>زوجية وتوافق 2 (mod 3)، مثل 2, 8, 14, ...</li>
+        <li>أو فردية وتوافق 1 (mod 3)، مثل 1, 7, 13, ...</li>
+      </ul>
+      <p>يمكن التعبير عن هذا بشكل مدمج: الشرط يتحقق لجميع الأعداد الصحيحة الموجبة <code>n</code> التي لا توافق 0 (mod 3) عندما تكون <code>n</code> فردية، ولا توافق 1 (mod 3) عندما تكون <code>n</code> زوجية. الطريقة الأبسط هي القول بأن <code>n</code> لا يمكن أن تكون من الشكل <code>6k+3</code> أو <code>6k+4</code>.</p>
+      </div>
+      </div>
+    `,
+  },
+  {
+    slug: 'geometry-locus',
+    title: 'مسألة المحل الهندسي',
+    description: 'أوجد المحل الهندسي لنقطة تتحرك وفق شروط معينة متعلقة بالمسافات.',
+    difficulty: 'صعب',
+    tags: ['هندسة تحليلية', 'أشعة'],
+    problemStatement: `
+      ${commonStyles}
+      <p>لتكن <code>A</code> و <code>B</code> نقطتين ثابتتين في المستوى حيث المسافة بينهما <code>AB = 4</code>. أوجد المحل الهندسي للنقطة <code>M</code> التي تحقق العلاقة الشعاعية التالية:</p>
+      <p class="font-mono text-center text-lg bg-gray-900/50 p-4 rounded-md">MA · MB = 5</p>
+      <p>(حيث <code>MA · MB</code> هو الجداء السلمي للشعاعين).</p>
+      </div>
+    `,
+    solution: `
+      ${commonStyles}
+      <div class="solution-box">
+      <p>لحل هذه المسألة، نستخدم خاصية المنتصف.</p>
+      <ol>
+        <li><b>إدخال نقطة المنتصف:</b>
+          <p>لتكن <code>I</code> هي منتصف القطعة المستقيمة <code>[AB]</code>. لدينا <code>IA = IB = 2</code>.</p>
+          <p>باستخدام علاقة شال، يمكننا كتابة الشعاعين <code>MA</code> و <code>MB</code> بدلالة <code>MI</code>:</p>
+          <p><code>MA = MI + IA</code></p>
+          <p><code>MB = MI + IB</code></p>
+        </li>
+        <li><b>تعويض في العلاقة الأصلية:</b>
+          <p><code>(MI + IA) · (MI + IB) = 5</code></p>
+          <p>نقوم بتوزيع الجداء السلمي:</p>
+          <p><code>MI · MI + MI · IB + IA · MI + IA · IB = 5</code></p>
+          <p><code>MI² + MI · (IA + IB) + IA · IB = 5</code></p>
+        </li>
+        <li><b>استخدام خصائص المنتصف:</b>
+          <p>بما أن <code>I</code> هي منتصف <code>[AB]</code>, فإن مجموع الشعاعين <code>IA + IB = 0</code> (الشعاع المعدوم).</p>
+          <p>أيضًا، الشعاعان <code>IA</code> و <code>IB</code> متعاكسان، لذا <code>IB = -IA</code>.</p>
+          <p>نعوض هذه الخصائص في المعادلة:</p>
+          <p><code>MI² + MI · (0) + IA · (-IA) = 5</code></p>
+          <p><code>MI² - IA² = 5</code></p>
+        </li>
+        <li><b>إيجاد المحل الهندسي:</b>
+          <p>نحن نعلم أن <code>IA = 2</code>, إذن <code>IA² = 4</code>.</p>
+          <p><code>MI² - 4 = 5</code></p>
+          <p><code>MI² = 9</code></p>
+          <p><code>MI = 3</code></p>
+        </li>
+      </ol>
+      <p>العلاقة <code>MI = 3</code> تعني أن المسافة بين النقطة المتحركة <code>M</code> والنقطة الثابتة <code>I</code> هي دائمًا 3.</p>
+      <p><b>الخلاصة:</b> المحل الهندسي للنقطة <code>M</code> هو دائرة مركزها <code>I</code> (منتصف القطعة <code>[AB]</code>) ونصف قطرها <code>R = 3</code>.</p>
       </div>
       </div>
     `,
