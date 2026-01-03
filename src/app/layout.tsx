@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import KineticBackground from '@/components/kinetic-background';
+import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
   title: 'Math Companion Pro',
@@ -32,6 +33,7 @@ export default function RootLayout({
           <main className="flex-grow container mx-auto px-4 py-8">
             {children}
           </main>
+          <Footer />
         </div>
         <Toaster />
       </body>
