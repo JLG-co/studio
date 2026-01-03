@@ -11,6 +11,8 @@ import {
 } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
 import { doc, setDoc } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 const { auth, firestore } = initializeFirebase();
 const provider = new GoogleAuthProvider();
@@ -27,11 +29,22 @@ export const signUpWithEmail = async (email: string, password: string, displayNa
 
   // Create a user document in Firestore
   const userDocRef = doc(firestore, 'users', user.uid);
-  await setDoc(userDocRef, {
+  const profileData = {
     displayName: displayName,
     email: user.email,
     photoURL: user.photoURL
-  }, { merge: true });
+  };
+
+  setDoc(userDocRef, profileData, { merge: true })
+    .catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'create',
+            requestResourceData: profileData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
+
 
   return userCredential;
 };
