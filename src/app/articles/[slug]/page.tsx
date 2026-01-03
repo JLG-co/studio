@@ -43,18 +43,18 @@ const ArticlePage = ({ params }: ArticlePageProps) => {
       </div>
 
       <Card className={glassCardClasses}>
-        {article.imageUrl && (
-            <div className="relative w-full h-64">
-                <Image
-                    src={article.imageUrl}
-                    alt={article.title}
-                    data-ai-hint={article.imageHint || 'abstract'}
-                    fill
-                    className="object-cover rounded-t-2xl"
-                />
-            </div>
-        )}
         <CardContent className="p-6 md:p-8">
+          {article.imageUrl && (
+              <div className="relative w-full md:w-1/3 max-w-sm h-64 float-left ml-6 mb-4 rounded-lg overflow-hidden">
+                  <Image
+                      src={article.imageUrl}
+                      alt={article.title}
+                      data-ai-hint={article.imageHint || 'abstract'}
+                      fill
+                      className="object-cover"
+                  />
+              </div>
+          )}
           <div
             className="prose prose-invert max-w-none text-slate-300"
             dangerouslySetInnerHTML={{ __html: article.content }}

@@ -309,7 +309,7 @@ export const articles: Article[] = [
     slug: 'math-in-mri',
     title: 'الرياضيات في التصوير بالرنين المغناطيسي (MRI)',
     description: 'كيف تمكّن تحويلات فورييه الأطباء من رؤية ما بداخل الجسم البشري.',
-    imageUrl: 'https://picsum.photos/seed/mri/1200/400',
+    imageUrl: 'https://picsum.photos/seed/mri/600/400',
     imageHint: 'mri scan',
     content: `
       ${commonStyles}
@@ -331,7 +331,7 @@ export const articles: Article[] = [
     slug: 'math-in-cybersecurity',
     title: 'الرياضيات في أمن المعلومات: تشفير RSA',
     description: 'الأعداد الأولية وكيف تحمي أسرارنا الرقمية عبر الإنترنت.',
-    imageUrl: 'https://picsum.photos/seed/rsa/1200/400',
+    imageUrl: 'https://picsum.photos/seed/rsa/600/400',
     imageHint: 'cyber security',
     content: `
       ${commonStyles}
@@ -448,6 +448,46 @@ export const exerciseSets: ExerciseSet[] = [
         options: ['متوازيان', 'متعامدان', 'متساويان في الطول', 'لهما نفس الاتجاه'],
         correctAnswer: 'متعامدان',
         explanation: 'يكون الشعاعان متعامدين إذا وفقط إذا كان جداؤهما السلمي يساوي صفرًا.',
+      },
+    ],
+  },
+  {
+    slug: 'sequences-basics',
+    title: 'أساسيات المتتاليات',
+    description: 'تمارين على المتتاليات الحسابية والهندسية.',
+    lessonSlug: 'sequences',
+    questions: [
+      {
+        question: 'متتالية حسابية حدها الأول u₀=5 وأساسها r=3. ما هو حدها الخامس u₄؟',
+        options: ['15', '17', '20', '12'],
+        correctAnswer: '17',
+        explanation: 'باستخدام عبارة الحد العام uₙ = u₀ + n*r، فإن u₄ = 5 + 4*3 = 5 + 12 = 17.',
+      },
+      {
+        question: 'متتالية هندسية حدها الأول u₀=2 وأساسها q=3. ما هو مجموع حدودها الثلاثة الأولى (u₀+u₁+u₂)؟',
+        options: ['26', '11', '8', '20'],
+        correctAnswer: '26',
+        explanation: 'الحدود هي u₀=2, u₁=2*3=6, u₂=6*3=18. المجموع هو 2+6+18=26. أو باستخدام قانون المجموع: S₃ = 2 * (1-3³)/(1-3) = 2 * (-26)/(-2) = 26.',
+      },
+    ],
+  },
+  {
+    slug: 'transformations-basics',
+    title: 'أساسيات التحويلات الهندسية',
+    description: 'اختبر معرفتك بالانسحاب، التحاكي، والدوران.',
+    lessonSlug: 'geometric-transformations',
+    questions: [
+      {
+        question: 'ما هي صورة النقطة A(1, 2) بانسحاب شعاعه v=(3, 1)؟',
+        options: ['(4, 3)', '(2, 1)', '(-2, 1)', '(3, 2)'],
+        correctAnswer: '(4, 3)',
+        explanation: 'صورة النقطة A هي A\'(x\', y\') حيث x\' = 1+3=4 و y\'=2+1=3. إذن A\'(4, 3).',
+      },
+      {
+        question: 'تحاكٍ مركزه O(0,0) ونسبته k=2. ما هي صورة النقطة B(3, 4)؟',
+        options: ['(5, 6)', '(1.5, 2)', '(6, 8)', '(9, 16)'],
+        correctAnswer: '(6, 8)',
+        explanation: 'صورة النقطة B هي B\'(x\', y\') حيث OB\' = 2 * OB. إذن x\'=2*3=6 و y\'=2*4=8. فتكون B\'(6, 8).',
       },
     ],
   },
