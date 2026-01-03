@@ -7,6 +7,7 @@ import BarycenterCalculator from "./barycenter-calculator";
 import FunctionPropertiesExplorer from "./function-properties-explorer";
 import LessonPlanGenerator from "./lesson-plan-generator";
 import ArticleSummarizer from "./article-summarizer";
+import MathChatbot from "./math-chatbot";
 
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg mt-6';
 
@@ -17,8 +18,9 @@ const LabPage = () => {
         title="مختبر الحساب"
         subtitle="مجموعة من الأدوات التفاعلية لمساعدتك على تصور وحل المشكلات الرياضية المعقدة."
       />
-      <Tabs defaultValue="grapher" className="w-full">
-        <TabsList className="grid w-full grid-cols-6 bg-white/5 border border-cyan-300/10">
+      <Tabs defaultValue="chatbot" className="w-full">
+        <TabsList className="grid w-full grid-cols-7 bg-white/5 border border-cyan-300/10">
+          <TabsTrigger value="chatbot" className="font-headline">رفيقك الذكي</TabsTrigger>
           <TabsTrigger value="grapher" className="font-headline">راسم الدوال</TabsTrigger>
           <TabsTrigger value="solver" className="font-headline">حل معادلة الدرجة الثانية</TabsTrigger>
           <TabsTrigger value="barycenter" className="font-headline">حساب المرجح</TabsTrigger>
@@ -26,6 +28,11 @@ const LabPage = () => {
           <TabsTrigger value="lesson-plan" className="font-headline">مولد الخطط</TabsTrigger>
           <TabsTrigger value="summarizer" className="font-headline">ملخص المقالات</TabsTrigger>
         </TabsList>
+        <TabsContent value="chatbot">
+          <div className={glassCardClasses}>
+            <MathChatbot />
+          </div>
+        </TabsContent>
         <TabsContent value="grapher">
           <div className={glassCardClasses}>
             <NeonGrapher />
