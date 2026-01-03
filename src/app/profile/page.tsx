@@ -3,15 +3,40 @@
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, LogIn } from 'lucide-react';
+import { LogIn, LogOut } from 'lucide-react';
+import { useUser } from '@/firebase';
+import { signInWithGoogle, signOutUser } from '@/firebase/auth/auth-service';
+import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
 
-// This is a placeholder for a real authentication flow
-const user = null; // Set to a user object to see the authenticated state
-
-const glassCardClasses =
-  'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
+const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
 
 const ProfilePage = () => {
+  const { user, loading } = useUser();
+
+  if (loading) {
+    return (
+        <div className="space-y-12">
+            <PageTitle title="ملفك الشخصي" subtitle="تتبع رحلتك التعليمية هنا" />
+            <Card className={glassCardClasses}>
+                <CardHeader>
+                    <div className="flex items-center gap-4">
+                        <Skeleton className="h-16 w-16 rounded-full" />
+                        <div className='space-y-2'>
+                            <Skeleton className="h-8 w-48" />
+                            <Skeleton className="h-4 w-64" />
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <Skeleton className="h-10 w-full" />
+                </CardContent>
+            </Card>
+        </div>
+    )
+  }
+
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center">
@@ -23,13 +48,10 @@ const ProfilePage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button size="lg" className="w-full">
+            <Button size="lg" className="w-full" onClick={signInWithGoogle}>
                 <LogIn className="w-5 h-5 ml-2" />
-                تسجيل الدخول (قريباً)
+                تسجيل الدخول باستخدام جوجل
             </Button>
-            <p className="text-xs text-muted-foreground mt-4">
-                ميزة تسجيل الدخول قيد التطوير حاليًا.
-            </p>
           </CardContent>
         </Card>
       </div>
@@ -42,16 +64,27 @@ const ProfilePage = () => {
       <Card className={glassCardClasses}>
         <CardHeader>
             <div className="flex items-center gap-4">
-                <User className="w-12 h-12 text-primary" />
+                <Avatar className="w-16 h-16">
+                    <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                    <AvatarFallback>
+                        {user.displayName?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                </Avatar>
                 <div>
-                    <CardTitle className="font-headline text-4xl">اسم الطالب</CardTitle>
-                    <CardDescription>مرحباً بعودتك!</CardDescription>
+                    <CardTitle className="font-headline text-4xl">{user.displayName}</CardTitle>
+                    <CardDescription>{user.email}</CardDescription>
                 </div>
             </div>
         </CardHeader>
-        <CardContent>
-            <h3 className="text-2xl font-headline mb-4">التقدم المحرز</h3>
-            <p className="text-muted-foreground">ستظهر هنا نتائج التمارين والتوصيات المخصصة لك قريبًا.</p>
+        <CardContent className="space-y-6">
+             <div>
+                <h3 className="text-2xl font-headline mb-4">التقدم المحرز</h3>
+                <p className="text-muted-foreground">ستظهر هنا نتائج التمارين والتوصيات المخصصة لك قريبًا.</p>
+            </div>
+            <Button variant="outline" onClick={signOutUser}>
+                <LogOut className="w-5 h-5 ml-2" />
+                تسجيل الخروج
+            </Button>
         </CardContent>
       </Card>
     </div>
