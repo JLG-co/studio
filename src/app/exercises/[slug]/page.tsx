@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { notFound, useParams } from 'next/navigation';
 import { exerciseSets } from '@/lib/data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,19 +11,60 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { CheckCircle2, XCircle, ArrowLeft, RotateCw } from 'lucide-react';
 import PageTitle from '@/components/page-title';
 import Link from 'next/link';
+import { useUser, useFirestore } from '@/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
 
 const ExercisePage = () => {
   const params = useParams();
-  const slug = params.slug;
+  const slug = params.slug as string;
   const exerciseSet = exerciseSets.find((e) => e.slug === slug);
+
+  const { user } = useUser();
+  const firestore = useFirestore();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (isFinished && user && firestore) {
+      const saveResult = async () => {
+        const percentage = Math.round((score / exerciseSet!.questions.length) * 100);
+        const resultData = {
+          userId: user.uid,
+          exerciseSlug: slug,
+          exerciseTitle: exerciseSet!.title,
+          score: score,
+          totalQuestions: exerciseSet!.questions.length,
+          percentage: percentage,
+          completedAt: serverTimestamp(),
+        };
+        try {
+          const resultsCollection = collection(firestore, `users/${user.uid}/exerciseResults`);
+          addDoc(resultsCollection, resultData)
+            .catch(async (serverError) => {
+                const permissionError = new FirestorePermissionError({
+                    path: resultsCollection.path,
+                    operation: 'create',
+                    requestResourceData: resultData,
+                });
+                errorEmitter.emit('permission-error', permissionError);
+            });
+
+        } catch (error) {
+          console.error("Error saving exercise result: ", error);
+        }
+      };
+
+      saveResult();
+    }
+  }, [isFinished, user, firestore, score, slug, exerciseSet]);
 
   if (!exerciseSet) {
     notFound();
@@ -69,6 +110,7 @@ const ExercisePage = () => {
                     <p className="text-xl text-slate-300">
                         لقد أجبت بشكل صحيح على {score} من أصل {exerciseSet.questions.length} أسئلة.
                     </p>
+                    {user && <p className='text-slate-400'>تم حفظ نتيجتك في ملفك الشخصي.</p>}
                     <div className="flex justify-center gap-4">
                         <Button onClick={handleRestart}>
                             <RotateCw className="w-4 h-4 ml-2" />

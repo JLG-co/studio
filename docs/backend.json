@@ -28,26 +28,36 @@
       "type": "object",
       "properties": {
         "userId": {
-          "type": "string"
+          "type": "string",
+          "description": "The ID of the user who completed the exercise."
         },
         "exerciseSlug": {
-          "type": "string"
+          "type": "string",
+          "description": "The slug of the completed exercise set."
+        },
+        "exerciseTitle": {
+          "type": "string",
+          "description": "The title of the completed exercise set."
         },
         "score": {
-          "type": "number"
+          "type": "number",
+          "description": "The number of correctly answered questions."
         },
         "totalQuestions": {
-          "type": "number"
+          "type": "number",
+          "description": "The total number of questions in the exercise."
         },
         "percentage": {
-          "type": "number"
+          "type": "number",
+          "description": "The user's score as a percentage."
         },
         "completedAt": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "The timestamp when the exercise was completed."
         }
       },
-      "required": ["userId", "exerciseSlug", "score", "totalQuestions", "percentage", "completedAt"]
+      "required": ["userId", "exerciseSlug", "exerciseTitle", "score", "totalQuestions", "percentage", "completedAt"]
     }
   },
   "auth": {

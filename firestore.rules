@@ -25,7 +25,7 @@ service cloud.firestore {
         // Users can read their own exercise results
         allow get, list: if isSignedIn() && isOwner(userId);
         // Users can create their own exercise results
-        allow create: if isSignedIn() && isOwner(userId);
+        allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == request.auth.uid;
         // Users cannot update or delete past results
         allow update, delete: if false;
     }

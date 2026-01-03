@@ -1,19 +1,32 @@
 'use client';
 
+import { useMemo } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn, LogOut } from 'lucide-react';
-import { useUser } from '@/firebase';
+import { LogIn, LogOut, TrendingUp, CheckCircle, BarChart } from 'lucide-react';
+import { useUser, useFirestore, useCollection } from '@/firebase';
 import { signInWithGoogle, signOutUser } from '@/firebase/auth/auth-service';
-import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { collection, query, orderBy } from 'firebase/firestore';
+import { Progress } from '@/components/ui/progress';
+import { format } from 'date-fns';
 
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
 
 const ProfilePage = () => {
-  const { user, loading } = useUser();
+  const { user, loading: userLoading } = useUser();
+  const firestore = useFirestore();
+
+  const resultsQuery = useMemo(() => {
+    if (!user || !firestore) return null;
+    return query(collection(firestore, `users/${user.uid}/exerciseResults`), orderBy('completedAt', 'desc'));
+  }, [user, firestore]);
+
+  const { data: results, loading: resultsLoading } = useCollection(resultsQuery);
+
+  const loading = userLoading || (user && resultsLoading);
 
   if (loading) {
     return (
@@ -29,8 +42,10 @@ const ProfilePage = () => {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent>
-                    <Skeleton className="h-10 w-full" />
+                <CardContent className='space-y-4'>
+                    <Skeleton className="h-8 w-1/3" />
+                    <Skeleton className="h-24 w-full" />
+                    <Skeleton className="h-10 w-32" />
                 </CardContent>
             </Card>
         </div>
@@ -64,7 +79,7 @@ const ProfilePage = () => {
       <Card className={glassCardClasses}>
         <CardHeader>
             <div className="flex items-center gap-4">
-                <Avatar className="w-16 h-16">
+                <Avatar className="w-16 h-16 border-2 border-primary">
                     <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
                     <AvatarFallback>
                         {user.displayName?.charAt(0) || 'U'}
@@ -78,8 +93,27 @@ const ProfilePage = () => {
         </CardHeader>
         <CardContent className="space-y-6">
              <div>
-                <h3 className="text-2xl font-headline mb-4">التقدم المحرز</h3>
-                <p className="text-muted-foreground">ستظهر هنا نتائج التمارين والتوصيات المخصصة لك قريبًا.</p>
+                <h3 className="text-2xl font-headline mb-4 flex items-center gap-2"><BarChart /> التقدم المحرز</h3>
+                {results && results.length > 0 ? (
+                  <div className="space-y-4">
+                    {results.map((result: any) => (
+                      <div key={result.id} className="p-4 bg-background/50 rounded-lg">
+                        <div className="flex justify-between items-center mb-2">
+                          <p className="font-bold text-lg text-white">{result.exerciseTitle}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {result.completedAt ? format(result.completedAt.toDate(), 'yyyy/MM/dd') : ''}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <Progress value={result.percentage} className="h-3" />
+                           <span className="font-bold text-primary text-lg w-16 text-left">{result.percentage}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">لم تكمل أي تمارين بعد. اذهب إلى صفحة التمارين وابدأ!</p>
+                )}
             </div>
             <Button variant="outline" onClick={signOutUser}>
                 <LogOut className="w-5 h-5 ml-2" />

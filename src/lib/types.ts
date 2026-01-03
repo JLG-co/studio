@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Lesson {
   slug: string;
   title: string;
@@ -39,4 +41,15 @@ export interface OlympiadQuestion {
   solution: string;
   difficulty: 'متوسط' | 'صعب' | 'صعب جداً';
   tags: string[];
+}
+
+export interface ExerciseResult {
+    id?: string;
+    userId: string;
+    exerciseSlug: string;
+    exerciseTitle: string;
+    score: number;
+    totalQuestions: number;
+    percentage: number;
+    completedAt: Timestamp;
 }
