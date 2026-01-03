@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveRight } from 'lucide-react';
+import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveRight, PencilRuler } from 'lucide-react';
 import Link from 'next/link';
 
 const features = [
@@ -9,6 +9,12 @@ const features = [
     title: "دروس تفاعلية",
     description: "شروحات شاملة ومفصلة لمنهج الرياضيات للسنة الثانية ثانوي.",
     href: "/lessons",
+  },
+  {
+    icon: <PencilRuler className="w-8 h-8 text-primary" />,
+    title: "تمارين تطبيقية",
+    description: "مجموعات من التمارين لاختبار فهمك وتطبيق ما تعلمته.",
+    href: "/exercises",
   },
   {
     icon: <FlaskConical className="w-8 h-8 text-primary" />,
@@ -55,7 +61,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {features.map((feature) => (
           <Link href={feature.href} key={feature.title} className="block group">
             <Card className={glassCardClasses}>

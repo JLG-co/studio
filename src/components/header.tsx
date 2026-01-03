@@ -11,6 +11,7 @@ import { useState } from 'react';
 const navLinks = [
   { href: '/', label: 'الرئيسية' },
   { href: '/lessons', label: 'الدروس' },
+  { href: '/exercises', label: 'التمارين' },
   { href: '/lab', label: 'المختبر' },
   { href: '/articles', label: 'المقالات' },
   { href: '/adaptive-learning', label: 'التعلم التكيفي' },
@@ -22,7 +23,7 @@ const Header = () => {
   const [isSheetOpen, setSheetOpen] = useState(false);
 
   const NavLink = ({ href, label }: { href: string; label: string }) => {
-    const isActive = pathname === href;
+    const isActive = pathname.startsWith(href) && (href !== '/' || pathname === '/');
     return (
       <Link
         href={href}
