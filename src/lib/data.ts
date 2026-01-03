@@ -67,7 +67,7 @@ export const lessons: Lesson[] = [
     slug: 'derivatives',
     title: 'الاشتقاق',
     description: 'مقدمة في حساب التفاضل، فهم المعدلات اللحظية للتغير، وقواعد الاشتقاق الأساسية.',
-    imageUrl: 'https://picsum.photos/seed/deriv/1200/400',
+    imageUrl: 'https://picsum.photos/seed/calculus/1200/400',
     imageHint: 'calculus graph',
     content: `
       ${commonStyles}
@@ -100,7 +100,7 @@ export const lessons: Lesson[] = [
     slug: 'limits',
     title: 'النهايات',
     description: 'استكشاف مفهوم النهايات، وكيفية حسابها، وتطبيقاتها في الاستمرارية والاشتقاق.',
-    imageUrl: 'https://picsum.photos/seed/limits/1200/400',
+    imageUrl: 'https://picsum.photos/seed/math-abstract/1200/400',
     imageHint: 'abstract math',
     content: `
       ${commonStyles}
@@ -128,7 +128,7 @@ export const lessons: Lesson[] = [
     slug: 'polynomials',
     title: 'كثيرات الحدود',
     description: 'العمليات على كثيرات الحدود، إيجاد الجذور، ونظرية الباقي.',
-    imageUrl: 'https://picsum.photos/seed/poly/1200/400',
+    imageUrl: 'https://picsum.photos/seed/algebra/1200/400',
     imageHint: 'algebra equation',
     content: `
       ${commonStyles}
@@ -156,7 +156,7 @@ export const lessons: Lesson[] = [
     slug: 'probability',
     title: 'الاحتمالات',
     description: 'أساسيات نظرية الاحتمالات، الأحداث، الاحتمال الشرطي، والمتغيرات العشوائية.',
-    imageUrl: 'https://picsum.photos/seed/prob/1200/400',
+    imageUrl: 'https://picsum.photos/seed/probability-dice/1200/400',
     imageHint: 'dice probability',
     content: `
        ${commonStyles}
@@ -179,7 +179,7 @@ export const lessons: Lesson[] = [
     slug: 'trigonometry',
     title: 'حساب المثلثات',
     description: 'الدوال المثلثية، دائرة الوحدة، المعادلات والمتطابقات المثلثية.',
-    imageUrl: 'https://picsum.photos/seed/trig/1200/400',
+    imageUrl: 'https://picsum.photos/seed/trigonometry-unit-circle/1200/400',
     imageHint: 'trigonometry circle',
     content: `
       ${commonStyles}
@@ -206,7 +206,7 @@ export const lessons: Lesson[] = [
     slug: 'vectors',
     title: 'الأشعة',
     description: 'مقدمة عن الأشعة في المستوى، العمليات على الأشعة، واستقلالها الخطي.',
-    imageUrl: 'https://picsum.photos/seed/vectors/1200/400',
+    imageUrl: 'https://picsum.photos/seed/vector-arrows/1200/400',
     imageHint: 'arrows vectors',
     content: `
       ${commonStyles}
@@ -227,7 +227,7 @@ export const lessons: Lesson[] = [
     slug: 'scalar-product',
     title: 'الجداء السلمي',
     description: 'تعريف الجداء السلمي، خصائصه، وتطبيقاته الهندسية مثل حساب الأطوال والزوايا.',
-    imageUrl: 'https://picsum.photos/seed/scalar/1200/400',
+    imageUrl: 'https://picsum.photos/seed/geometry-angles/1200/400',
     imageHint: 'geometric angles',
     content: `
       ${commonStyles}
@@ -256,7 +256,7 @@ export const lessons: Lesson[] = [
     slug: 'geometric-transformations',
     title: 'التحويلات الهندسية',
     description: 'فهم التحاكي، الدوران، والانسحاب وتأثيرها على الأشكال الهندسية.',
-    imageUrl: 'https://picsum.photos/seed/transform/1200/400',
+    imageUrl: 'https://picsum.photos/seed/geometric-patterns/1200/400',
     imageHint: 'geometric transformation',
     content: `
       ${commonStyles}
@@ -282,7 +282,7 @@ export const lessons: Lesson[] = [
     slug: 'sequences',
     title: 'المتتاليات العددية',
     description: 'دراسة المتتاليات الحسابية والهندسية، حساب الحدود، والمجموع.',
-    imageUrl: 'https://picsum.photos/seed/sequence/1200/400',
+    imageUrl: 'https://picsum.photos/seed/sequences-numbers/1200/400',
     imageHint: 'number sequence',
     content: `
       ${commonStyles}
@@ -317,7 +317,7 @@ export const articles: Article[] = [
     slug: 'math-in-mri',
     title: 'الرياضيات في التصوير بالرنين المغناطيسي (MRI)',
     description: 'كيف تمكّن تحويلات فورييه الأطباء من رؤية ما بداخل الجسم البشري.',
-    imageUrl: 'https://picsum.photos/seed/mri/600/400',
+    imageUrl: 'https://picsum.photos/seed/mri-scan/600/400',
     imageHint: 'mri scan',
     content: `
       ${commonStyles}
@@ -339,7 +339,7 @@ export const articles: Article[] = [
     slug: 'math-in-cybersecurity',
     title: 'الرياضيات في أمن المعلومات: تشفير RSA',
     description: 'الأعداد الأولية وكيف تحمي أسرارنا الرقمية عبر الإنترنت.',
-    imageUrl: 'https://picsum.photos/seed/rsa/600/400',
+    imageUrl: 'https://picsum.photos/seed/cyber-lock/600/400',
     imageHint: 'cyber security',
     content: `
       ${commonStyles}
@@ -366,6 +366,36 @@ export const articles: Article[] = [
       <p>لأن معرفة المفتاح العام (e, n) لا تمكن المهاجم من حساب المفتاح الخاص (d) بسهولة. لحساب <code>d</code>، يحتاج المهاجم إلى معرفة <code>φ(n)</code>، وهو ما يتطلب معرفة <code>p</code> و <code>q</code>. وهذا يعني أنه يجب عليه تحليل الرقم <code>n</code> إلى عوامله الأولية. بالنسبة للأعداد الكبيرة المستخدمة في RSA، تعتبر هذه العملية مستحيلة حسابيًا باستخدام أجهزة الكمبيوتر الحالية.</p>
       <h3>الخلاصة</h3>
       <p>يعتبر تشفير RSA مثالًا رائعًا على كيفية استخدام مفاهيم رياضية بحتة مثل نظرية الأعداد والأعداد الأولية لبناء أساس العالم الرقمي الآمن الذي نعتمد عليه يوميًا.</p>
+      </div>
+    `,
+  },
+  {
+    slug: 'math-in-gps',
+    title: 'الرياضيات وراء GPS',
+    description: 'كيف تساعد نظرية النسبية والهندسة في تحديد موقعك بدقة.',
+    imageUrl: 'https://picsum.photos/seed/gps-satellite/600/400',
+    imageHint: 'satellite orbit',
+    content: `
+      ${commonStyles}
+      <h3>مقدمة</h3>
+      <p>نظام تحديد المواقع العالمي (GPS) هو تقنية نستخدمها يوميًا، ولكن القليل منا يفكر في الرياضيات المعقدة التي تجعلها ممكنة. من الهندسة ثلاثية الأبعاد إلى نظرية النسبية لأينشتاين، الرياضيات هي جوهر عمل GPS.</p>
+      <h3>التثليث المساحي (Trilateration)</h3>
+      <p>الفكرة الأساسية وراء GPS هي التثليث المساحي. جهاز الاستقبال الخاص بك على الأرض يقيس المسافة بينه وبين عدة أقمار صناعية في الفضاء. كل قمر صناعي يبث إشارة تحتوي على موقعه الدقيق ووقت إرسال الإشارة.</p>
+      <ul>
+        <li>مع قمر صناعي واحد، أنت تعرف أنك في مكان ما على سطح كرة مركزها القمر الصناعي ونصف قطرها المسافة بينك وبينه.</li>
+        <li>مع قمرين صناعيين، أنت تقع على دائرة تقاطع الكرتين.</li>
+        <li>مع ثلاثة أقمار صناعية، تتقاطع الكرات الثلاث في نقطتين. عادة ما تكون إحدى النقطتين غير منطقية (بعيدة في الفضاء)، لذلك يمكن تحديد موقعك.</li>
+        <li>يُستخدم قمر صناعي رابع لتصحيح أخطاء الساعة في جهاز الاستقبال، مما يوفر دقة أعلى بكثير.</li>
+      </ul>
+      <h3>دور نظرية النسبية</h3>
+      <p>هنا يصبح الأمر أكثر إثارة. تدور الأقمار الصناعية بسرعة كبيرة وعلى ارتفاعات عالية، مما يعني أنها تتأثر بتأثيرات نظرية النسبية الخاصة والعامة لأينشتاين.</p>
+      <ul>
+      <li><b>النسبية الخاصة:</b> بسبب سرعتها العالية (حوالي 14,000 كم/ساعة)، تسير الساعات على متن الأقمار الصناعية أبطأ قليلاً من الساعات على الأرض. هذا التأثير يجعلها تتأخر بحوالي 7 ميكروثانية كل يوم.</li>
+      <li><b>النسبية العامة:</b> لأن الأقمار الصناعية في مجال جاذبية أضعف من سطح الأرض، تسير ساعاتها أسرع قليلاً. هذا التأثير يجعلها تتقدم بحوالي 45 ميكروثانية كل يوم.</li>
+      </ul>
+      <p>مجموع التأثيرين هو أن ساعات GPS تتقدم بحوالي 38 ميكروثانية يوميًا. قد لا يبدو هذا كثيرًا، ولكن إذا لم يتم تصحيحه، فإن أخطاء تحديد المواقع ستتراكم بمعدل حوالي 10 كيلومترات كل يوم! لذلك، يتم تعديل ساعات الأقمار الصناعية عمدًا لتعويض هذه التأثيرات النسبية، مما يضمن دقة النظام.</p>
+      <h3>الخلاصة</h3>
+      <p>في المرة القادمة التي تستخدم فيها خرائط Google، تذكر أنك لا تستخدم فقط شبكة من الأقمار الصناعية، بل تستخدم أيضًا الهندسة الإقليدية ونظرية النسبية لأينشتاين، وكلها منسقة بواسطة الرياضيات الدقيقة.</p>
       </div>
     `,
   },
@@ -681,3 +711,4 @@ export const olympiadQuestions: OlympiadQuestion[] = [
     `,
   },
 ];
+
