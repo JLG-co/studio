@@ -1,19 +1,195 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn, LogOut, TrendingUp, CheckCircle, BarChart } from 'lucide-react';
+import { LogIn, LogOut, UserPlus, BarChart } from 'lucide-react';
 import { useUser, useFirestore, useCollection } from '@/firebase';
-import { signInWithGoogle, signOutUser } from '@/firebase/auth/auth-service';
+import { signInWithEmail, signUpWithEmail, signOutUser } from '@/firebase/auth/auth-service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
 
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "البريد الإلكتروني غير صالح" }),
+  password: z.string().min(1, { message: "كلمة المرور مطلوبة" }),
+});
+
+const signupSchema = z.object({
+  displayName: z.string().min(3, { message: "يجب أن يكون اسم العرض 3 أحرف على الأقل" }),
+  email: z.string().email({ message: "البريد الإلكتروني غير صالح" }),
+  password: z.string().min(6, { message: "يجب أن تكون كلمة المرور 6 أحرف على الأقل" }),
+});
+
+
+const AuthForm = () => {
+    const [authError, setAuthError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const { toast } = useToast();
+
+    const loginForm = useForm<z.infer<typeof loginSchema>>({
+        resolver: zodResolver(loginSchema),
+        defaultValues: { email: "", password: "" },
+    });
+
+    const signupForm = useForm<z.infer<typeof signupSchema>>({
+        resolver: zodResolver(signupSchema),
+        defaultValues: { displayName: "", email: "", password: "" },
+    });
+
+    const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
+        setLoading(true);
+        setAuthError(null);
+        try {
+            await signInWithEmail(values.email, values.password);
+        } catch (error: any) {
+            setAuthError("فشل تسجيل الدخول. يرجى التحقق من بريدك الإلكتروني وكلمة المرور.");
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const onSignupSubmit = async (values: z.infer<typeof signupSchema>) => {
+        setLoading(true);
+        setAuthError(null);
+        try {
+            await signUpWithEmail(values.email, values.password, values.displayName);
+             toast({
+                title: "تم إنشاء الحساب بنجاح!",
+                description: "يمكنك الآن تسجيل الدخول.",
+            });
+        } catch (error: any) {
+            if (error.code === 'auth/email-already-in-use') {
+                 setAuthError("هذا البريد الإلكتروني مستخدم بالفعل.");
+            } else {
+                 setAuthError("فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.");
+            }
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <Card className={`${glassCardClasses} max-w-md mx-auto`}>
+            <CardHeader className='text-center'>
+                <CardTitle className="font-headline text-3xl">صفحة الملف الشخصي</CardTitle>
+                <CardDescription>
+                    قم بتسجيل الدخول أو إنشاء حساب جديد لتتبع تقدمك.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Tabs defaultValue="login" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="login">تسجيل الدخول</TabsTrigger>
+                        <TabsTrigger value="signup">إنشاء حساب</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="login">
+                        <Form {...loginForm}>
+                            <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4 mt-4">
+                                <FormField
+                                    control={loginForm.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>البريد الإلكتروني</FormLabel>
+                                            <FormControl>
+                                                <Input type="email" placeholder="email@example.com" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={loginForm.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>كلمة المرور</FormLabel>
+                                            <FormControl>
+                                                <Input type="password" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {authError && <p className="text-sm font-medium text-destructive">{authError}</p>}
+                                <Button type="submit" disabled={loading} className="w-full">
+                                    <LogIn className="w-4 h-4 ml-2" />
+                                    {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
+                                </Button>
+                            </form>
+                        </Form>
+                    </TabsContent>
+                    <TabsContent value="signup">
+                        <Form {...signupForm}>
+                            <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4 mt-4">
+                               <FormField
+                                    control={signupForm.control}
+                                    name="displayName"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>الاسم</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="اسمك الكامل" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={signupForm.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>البريد الإلكتروني</FormLabel>
+                                            <FormControl>
+                                                <Input type="email" placeholder="email@example.com" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={signupForm.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>كلمة المرور</FormLabel>
+                                            <FormControl>
+                                                <Input type="password" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {authError && <p className="text-sm font-medium text-destructive">{authError}</p>}
+                                <Button type="submit" disabled={loading} className="w-full">
+                                    <UserPlus className="w-4 h-4 ml-2" />
+                                    {loading ? 'جاري الإنشاء...' : 'إنشاء حساب'}
+                                </Button>
+                            </form>
+                        </Form>
+                    </TabsContent>
+                </Tabs>
+            </CardContent>
+        </Card>
+    );
+};
+
 
 const ProfilePage = () => {
   const { user, loading: userLoading } = useUser();
@@ -55,20 +231,7 @@ const ProfilePage = () => {
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center">
-        <Card className={`${glassCardClasses} max-w-md`}>
-          <CardHeader>
-            <CardTitle className="font-headline text-3xl">صفحة الملف الشخصي</CardTitle>
-            <CardDescription>
-                للوصول إلى هذه الصفحة، يرجى تسجيل الدخول. سيسمح لك ذلك بتتبع تقدمك وحفظ نتائجك.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button size="lg" className="w-full" onClick={signInWithGoogle}>
-                <LogIn className="w-5 h-5 ml-2" />
-                تسجيل الدخول باستخدام جوجل
-            </Button>
-          </CardContent>
-        </Card>
+        <AuthForm />
       </div>
     );
   }
@@ -82,11 +245,11 @@ const ProfilePage = () => {
                 <Avatar className="w-16 h-16 border-2 border-primary">
                     <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
                     <AvatarFallback>
-                        {user.displayName?.charAt(0) || 'U'}
+                        {user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}
                     </AvatarFallback>
                 </Avatar>
                 <div>
-                    <CardTitle className="font-headline text-4xl">{user.displayName}</CardTitle>
+                    <CardTitle className="font-headline text-4xl">{user.displayName || 'مستخدم جديد'}</CardTitle>
                     <CardDescription>{user.email}</CardDescription>
                 </div>
             </div>
