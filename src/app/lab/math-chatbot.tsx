@@ -7,8 +7,10 @@ import { SendHorizonal, Loader2, Bot, User } from 'lucide-react';
 import { askMathChatbot, type ChatMessage } from '@/ai/flows/math-chatbot';
 import { cn } from '@/lib/utils';
 import Textarea from 'react-textarea-autosize';
+import { useUser } from '@/firebase';
 
 const MathChatbot = () => {
+  const { user } = useUser();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +53,7 @@ const MathChatbot = () => {
           <Bot className="w-7 h-7 text-primary"/>
           رفيقك الذكي في الرياضيات
         </CardTitle>
-        <CardDescription>اطرح أي سؤال يتعلق بالرياضيات واحصل على إجابة فورية.</CardDescription>
+        <CardDescription>اطرح أي سؤال يتعلق بالرياضيات واحصل على إجابة فورية. {user ? `مرحباً بك ${user.displayName}!` : ''}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[500px] flex flex-col">
