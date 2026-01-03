@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { SendHorizonal, Loader2, Bot, User, CornerDownLeft } from 'lucide-react';
+import { SendHorizonal, Loader2, Bot, User } from 'lucide-react';
 import { askMathChatbot, type ChatMessage } from '@/ai/flows/math-chatbot';
 import { cn } from '@/lib/utils';
 import Textarea from 'react-textarea-autosize';
@@ -36,6 +36,7 @@ const MathChatbot = () => {
       const botResponse = await askMathChatbot({ messages: newMessages });
       setMessages([...newMessages, botResponse]);
     } catch (error) {
+      console.error(error);
       const errorMessage: ChatMessage = { role: 'bot', content: 'عذراً، حدث خطأ أثناء التواصل مع رفيقك الذكي. يرجى المحاولة مرة أخرى.' };
       setMessages([...newMessages, errorMessage]);
     } finally {

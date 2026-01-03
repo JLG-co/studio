@@ -14,6 +14,7 @@ import { z } from 'genkit';
 const ChatMessageSchema = z.object({
   role: z.enum(['user', 'bot']),
   content: z.string(),
+  isUser: z.boolean().optional(),
 });
 export type ChatMessage = z.infer<typeof ChatMessageSchema>;
 
@@ -29,8 +30,7 @@ export async function askMathChatbot(input: MathChatbotInput): Promise<MathChatb
 }
 
 const historyTemplate = `{{#each messages}}
-{{#if (eq role 'user')}}User: {{content}}{{/if}}
-{{#if (eq role 'bot')}}Bot: {{content}}{{/if}}
+{{#if isUser}}User: {{content}}{{else}}Bot: {{content}}{{/if}}
 {{/each}}
 `;
 
@@ -63,7 +63,10 @@ const mathChatbotFlow = ai.defineFlow(
     outputSchema: ChatMessageSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    // Add isUser property for template
+    const messagesWithIsUser = input.messages.map(m => ({...m, isUser: m.role === 'user'}));
+    
+    const { output } = await prompt({messages: messagesWithIsUser});
     return {
       role: 'bot',
       content: output!,
