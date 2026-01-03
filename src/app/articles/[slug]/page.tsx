@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 
 type ArticlePageProps = {
@@ -42,6 +43,17 @@ const ArticlePage = ({ params }: ArticlePageProps) => {
       </div>
 
       <Card className={glassCardClasses}>
+        {article.imageUrl && (
+            <div className="relative w-full h-64">
+                <Image
+                    src={article.imageUrl}
+                    alt={article.title}
+                    data-ai-hint={article.imageHint || 'abstract'}
+                    fill
+                    className="object-cover rounded-t-2xl"
+                />
+            </div>
+        )}
         <CardContent className="p-6 md:p-8">
           <div
             className="prose prose-invert max-w-none text-slate-300"

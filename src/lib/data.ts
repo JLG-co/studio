@@ -46,6 +46,10 @@ const commonStyles = `
       font-weight: bold;
       color: hsl(var(--primary-foreground));
     }
+    .content-container img {
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+    }
   </style>
   <div class="content-container">
 `;
@@ -55,6 +59,8 @@ export const lessons: Lesson[] = [
     slug: 'derivatives',
     title: 'الاشتقاق',
     description: 'مقدمة في حساب التفاضل، فهم المعدلات اللحظية للتغير، وقواعد الاشتقاق الأساسية.',
+    imageUrl: 'https://picsum.photos/seed/deriv/1200/400',
+    imageHint: 'calculus graph',
     content: `
       ${commonStyles}
       <h3>تعريف الدالة المشتقة</h3>
@@ -86,6 +92,8 @@ export const lessons: Lesson[] = [
     slug: 'limits',
     title: 'النهايات',
     description: 'استكشاف مفهوم النهايات، وكيفية حسابها، وتطبيقاتها في الاستمرارية والاشتقاق.',
+    imageUrl: 'https://picsum.photos/seed/limits/1200/400',
+    imageHint: 'abstract math',
     content: `
       ${commonStyles}
       <h3>مفهوم النهاية</h3>
@@ -112,6 +120,8 @@ export const lessons: Lesson[] = [
     slug: 'polynomials',
     title: 'كثيرات الحدود',
     description: 'العمليات على كثيرات الحدود، إيجاد الجذور، ونظرية الباقي.',
+    imageUrl: 'https://picsum.photos/seed/poly/1200/400',
+    imageHint: 'algebra equation',
     content: `
       ${commonStyles}
       <h3>تعريف كثيرات الحدود</h3>
@@ -138,6 +148,8 @@ export const lessons: Lesson[] = [
     slug: 'probability',
     title: 'الاحتمالات',
     description: 'أساسيات نظرية الاحتمالات، الأحداث، الاحتمال الشرطي، والمتغيرات العشوائية.',
+    imageUrl: 'https://picsum.photos/seed/prob/1200/400',
+    imageHint: 'dice probability',
     content: `
        ${commonStyles}
       <h3>مقدمة في الاحتمالات</h3>
@@ -159,6 +171,8 @@ export const lessons: Lesson[] = [
     slug: 'trigonometry',
     title: 'حساب المثلثات',
     description: 'الدوال المثلثية، دائرة الوحدة، المعادلات والمتطابقات المثلثية.',
+    imageUrl: 'https://picsum.photos/seed/trig/1200/400',
+    imageHint: 'trigonometry circle',
     content: `
       ${commonStyles}
       <h3>الدوال المثلثية</h3>
@@ -184,6 +198,8 @@ export const lessons: Lesson[] = [
     slug: 'vectors',
     title: 'الأشعة',
     description: 'مقدمة عن الأشعة في المستوى، العمليات على الأشعة، واستقلالها الخطي.',
+    imageUrl: 'https://picsum.photos/seed/vectors/1200/400',
+    imageHint: 'arrows vectors',
     content: `
       ${commonStyles}
       <h3>ما هي الأشعة؟</h3>
@@ -203,6 +219,8 @@ export const lessons: Lesson[] = [
     slug: 'scalar-product',
     title: 'الجداء السلمي',
     description: 'تعريف الجداء السلمي، خصائصه، وتطبيقاته الهندسية مثل حساب الأطوال والزوايا.',
+    imageUrl: 'https://picsum.photos/seed/scalar/1200/400',
+    imageHint: 'geometric angles',
     content: `
       ${commonStyles}
       <h3>تعريف الجداء السلمي</h3>
@@ -230,6 +248,8 @@ export const lessons: Lesson[] = [
     slug: 'geometric-transformations',
     title: 'التحويلات الهندسية',
     description: 'فهم التحاكي، الدوران، والانسحاب وتأثيرها على الأشكال الهندسية.',
+    imageUrl: 'https://picsum.photos/seed/transform/1200/400',
+    imageHint: 'geometric transformation',
     content: `
       ${commonStyles}
       <h3>مقدمة</h3>
@@ -254,6 +274,8 @@ export const lessons: Lesson[] = [
     slug: 'sequences',
     title: 'المتتاليات العددية',
     description: 'دراسة المتتاليات الحسابية والهندسية، حساب الحدود، والمجموع.',
+    imageUrl: 'https://picsum.photos/seed/sequence/1200/400',
+    imageHint: 'number sequence',
     content: `
       ${commonStyles}
       <h3>تعريف المتتالية</h3>
@@ -287,6 +309,8 @@ export const articles: Article[] = [
     slug: 'math-in-mri',
     title: 'الرياضيات في التصوير بالرنين المغناطيسي (MRI)',
     description: 'كيف تمكّن تحويلات فورييه الأطباء من رؤية ما بداخل الجسم البشري.',
+    imageUrl: 'https://picsum.photos/seed/mri/1200/400',
+    imageHint: 'mri scan',
     content: `
       ${commonStyles}
       <h3>مقدمة</h3>
@@ -298,7 +322,6 @@ export const articles: Article[] = [
       <p>بشكل أساسي، يقوم تحويل فورييه بتفكيك الإشارة المعقدة إلى مجموع من الموجات الجيبية البسيطة ذات الترددات والسعات المختلفة. من خلال تحليل هذه المكونات، يمكن للحاسوب إعادة بناء صورة مفصلة مقطعية للجسم.</p>
       <p>المعادلة الأساسية لتحويل فورييه ثنائي الأبعاد المستخدم في الرنين المغناطيسي هي:</p>
       <p><code>I(x,y) = ∫∫ S(kx,ky) * e^(i*2π*(kx*x + ky*y)) dkx dky</code></p>
-      <p>حيث <code>I(x,y)</code> هي الصورة النهائية، و <code>S(kx,ky)</code> هي الإشارة في k-space.</p>
       <h3>الخلاصة</h3>
       <p>بدون تحويل فورييه، سيكون التصوير بالرنين المغناطيسي مجرد مجموعة من الإشارات غير المفهومة. هذه الأداة الرياضية هي الجسر الذي يحول بيانات فيزيائية خام إلى صور تشخيصية منقذة للحياة، مما يوضح القوة الهائلة للرياضيات التطبيقية في عالمنا.</p>
       </div>
@@ -308,6 +331,8 @@ export const articles: Article[] = [
     slug: 'math-in-cybersecurity',
     title: 'الرياضيات في أمن المعلومات: تشفير RSA',
     description: 'الأعداد الأولية وكيف تحمي أسرارنا الرقمية عبر الإنترنت.',
+    imageUrl: 'https://picsum.photos/seed/rsa/1200/400',
+    imageHint: 'cyber security',
     content: `
       ${commonStyles}
       <h3>مقدمة</h3>

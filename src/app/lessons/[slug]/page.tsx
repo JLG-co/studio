@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import Image from 'next/image';
 
 type LessonPageProps = {
   params: {
@@ -41,6 +42,17 @@ const LessonPage = ({ params }: LessonPageProps) => {
       </div>
       
       <Card className={glassCardClasses}>
+        {lesson.imageUrl && (
+            <div className="relative w-full h-64">
+                <Image
+                    src={lesson.imageUrl}
+                    alt={lesson.title}
+                    data-ai-hint={lesson.imageHint || 'abstract'}
+                    fill
+                    className="object-cover rounded-t-2xl"
+                />
+            </div>
+        )}
         <CardContent className="p-6 md:p-8">
           <div
             className="prose prose-invert max-w-none text-slate-300"

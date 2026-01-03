@@ -3,6 +3,8 @@ export interface Lesson {
   title: string;
   description: string;
   content: string;
+  imageUrl?: string;
+  imageHint?: string;
 }
 
 export interface Article {
@@ -10,6 +12,8 @@ export interface Article {
   title:string;
   description: string;
   content: string;
+  imageUrl?: string;
+  imageHint?: string;
 }
 
 export interface Question {
