@@ -40,7 +40,7 @@ const AgLogo = ({ size }: { size: number }) => (
     viewBox="0 0 100 100"
   >
     <defs>
-      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <filter id="glow-header" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="5" result="coloredBlur" />
         <feMerge>
           <feMergeNode in="coloredBlur" />
@@ -58,7 +58,7 @@ const AgLogo = ({ size }: { size: number }) => (
       stroke="hsl(var(--primary))"
       strokeWidth="4"
       fill="none"
-      style={{ filter: 'url(#glow)' }}
+      style={{ filter: 'url(#glow-header)' }}
     />
     <text
       x="50%"
