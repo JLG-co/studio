@@ -4,9 +4,9 @@ import { useState } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn, LogOut, UserPlus, BarChart, Lock } from 'lucide-react';
+import { LogIn, LogOut, UserPlus, BarChart, Lock, Mail } from 'lucide-react';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { signInWithEmail, signUpWithEmail, signOutUser } from '@/firebase/auth/auth-service';
+import { signInWithEmail, signUpWithEmail, signOutUser, sendPasswordReset } from '@/firebase/auth/auth-service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { collection, query, orderBy } from 'firebase/firestore';
@@ -19,6 +19,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
 
@@ -33,6 +44,9 @@ const signupSchema = z.object({
   password: z.string().min(6, { message: "يجب أن تكون كلمة المرور 6 أحرف على الأقل" }),
 });
 
+const resetPasswordSchema = z.object({
+    email: z.string().email({ message: "البريد الإلكتروني غير صالح" }),
+});
 
 const AuthForm = () => {
     const [authError, setAuthError] = useState<string | null>(null);
@@ -47,6 +61,11 @@ const AuthForm = () => {
     const signupForm = useForm<z.infer<typeof signupSchema>>({
         resolver: zodResolver(signupSchema),
         defaultValues: { displayName: "", email: "", password: "" },
+    });
+    
+    const resetPasswordForm = useForm<z.infer<typeof resetPasswordSchema>>({
+        resolver: zodResolver(resetPasswordSchema),
+        defaultValues: { email: "" },
     });
 
     const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
@@ -73,7 +92,7 @@ const AuthForm = () => {
             await signUpWithEmail(values.email, values.password, values.displayName);
              toast({
                 title: "تم إنشاء الحساب بنجاح!",
-                description: "يمكنك الآن تسجيل الدخول.",
+                description: "تم إرسال بريد إلكتروني للتحقق. يرجى التحقق من بريدك الوارد.",
             });
         } catch (error: any) {
              if (error.code === 'auth/email-already-in-use') {
@@ -87,6 +106,28 @@ const AuthForm = () => {
             setLoading(false);
         }
     };
+    
+    const onPasswordResetSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
+        setLoading(true);
+        try {
+            await sendPasswordReset(values.email);
+            toast({
+                title: "تم إرسال طلب إعادة التعيين",
+                description: "إذا كان هناك حساب مرتبط بهذا البريد الإلكتروني، فستصلك رسالة لإعادة تعيين كلمة المرور.",
+            });
+            return true; // To close the dialog
+        } catch (error) {
+            console.error("Password reset error:", error);
+            toast({
+                variant: 'destructive',
+                title: "حدث خطأ",
+                description: "لم نتمكن من إرسال بريد إعادة التعيين. يرجى المحاولة مرة أخرى.",
+            });
+            return false; // To keep dialog open
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <Card className={`${glassCardClasses} max-w-md mx-auto`}>
@@ -132,6 +173,54 @@ const AuthForm = () => {
                                     )}
                                 />
                                 {authError && <p className="text-sm font-medium text-destructive">{authError}</p>}
+                                <div className="flex items-center justify-between">
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button type="button" variant="link" className="p-0 h-auto">هل نسيت كلمة المرور؟</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <Form {...resetPasswordForm}>
+                                            <form onSubmit={resetPasswordForm.handleSubmit(async (values) => {
+                                                const success = await onPasswordResetSubmit(values);
+                                                // This is a bit of a hack to close the dialog.
+                                                // We rely on the button to be of type "button" to prevent form submission
+                                                // and manually click the cancel button.
+                                                if (success) {
+                                                    document.getElementById('reset-password-cancel')?.click();
+                                                }
+                                            })}>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>إعادة تعيين كلمة المرور</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        أدخل بريدك الإلكتروني المسجل لإرسال رابط إعادة تعيين كلمة المرور.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <div className="py-4">
+                                                    <FormField
+                                                        control={resetPasswordForm.control}
+                                                        name="email"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel>البريد الإلكتروني</FormLabel>
+                                                                <FormControl>
+                                                                    <Input type="email" placeholder="email@example.com" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                </div>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel id="reset-password-cancel">إلغاء</AlertDialogCancel>
+                                                    <Button type="submit" disabled={loading}>
+                                                        {loading ? "جاري الإرسال..." : "إرسال"}
+                                                    </Button>
+                                                </AlertDialogFooter>
+                                                </form>
+                                            </Form>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </div>
                                 <Button type="submit" disabled={loading} className="w-full">
                                     <LogIn className="w-4 h-4 ml-2" />
                                     {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
@@ -250,17 +339,25 @@ const ProfilePage = () => {
       <PageTitle title="ملفك الشخصي" subtitle="تتبع رحلتك التعليمية هنا" />
       <Card className={glassCardClasses}>
         <CardHeader>
-            <div className="flex items-center gap-4">
-                <Avatar className="w-16 h-16 border-2 border-primary">
-                    <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
-                    <AvatarFallback>
-                        {user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}
-                    </AvatarFallback>
-                </Avatar>
-                <div>
-                    <CardTitle className="font-headline text-4xl">{user.displayName || 'مستخدم جديد'}</CardTitle>
-                    <CardDescription>{user.email}</CardDescription>
+            <div className="flex flex-wrap items-center gap-4 justify-between">
+                <div className="flex items-center gap-4">
+                    <Avatar className="w-16 h-16 border-2 border-primary">
+                        <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                        <AvatarFallback>
+                            {user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <CardTitle className="font-headline text-4xl">{user.displayName || 'مستخدم جديد'}</CardTitle>
+                        <CardDescription>{user.email}</CardDescription>
+                    </div>
                 </div>
+                 {!user.emailVerified && (
+                    <div className='text-sm text-yellow-400 bg-yellow-400/10 border border-yellow-400/50 rounded-md p-3 flex items-center gap-2'>
+                        <Mail className='w-4 h-4'/>
+                        <span>بريدك الإلكتروني غير مُفعَّل. يرجى التحقق من صندوق الوارد الخاص بك.</span>
+                    </div>
+                )}
             </div>
         </CardHeader>
         <CardContent className="space-y-6">

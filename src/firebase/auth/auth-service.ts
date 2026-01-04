@@ -8,6 +8,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  sendEmailVerification,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -28,6 +30,9 @@ export const signUpWithEmail = async (email: string, password: string, displayNa
     
     // Update the user's profile with the display name
     await updateProfile(user, { displayName });
+    
+    // Send verification email
+    await sendEmailVerification(user);
 
     // Create a user document in Firestore
     const userDocRef = doc(firestore, 'users', user.uid);
@@ -76,4 +81,11 @@ export const signOutUser = async () => {
   } catch (error) {
     console.error('Error during sign-out:', error);
   }
+};
+
+export const sendPasswordReset = async (email: string) => {
+  if (!auth) {
+    throw new Error('Firebase not initialized');
+  }
+  return sendPasswordResetEmail(auth, email);
 };
