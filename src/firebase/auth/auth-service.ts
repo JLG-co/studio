@@ -131,4 +131,15 @@ export const sendPasswordReset = async (email: string) => {
   return sendPasswordResetEmail(auth, email);
 };
 
-    
+export const resendVerificationEmail = async () => {
+    if (!auth.currentUser) {
+        throw new Error('No user is currently signed in.');
+    }
+    try {
+        await sendEmailVerification(auth.currentUser);
+    } catch (error) {
+        console.error('Error sending verification email:', error);
+        // Re-throw to be handled by the UI
+        throw error;
+    }
+};

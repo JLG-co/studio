@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LogIn, LogOut, UserPlus, BarChart, Lock, Mail } from 'lucide-react';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { signInWithEmail, signUpWithEmail, signOutUser, sendPasswordReset, signInWithGoogle, signInWithApple } from '@/firebase/auth/auth-service';
+import { signInWithEmail, signUpWithEmail, signOutUser, sendPasswordReset, signInWithGoogle, signInWithApple, resendVerificationEmail } from '@/firebase/auth/auth-service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { collection, query, orderBy } from 'firebase/firestore';
@@ -343,6 +343,8 @@ const AuthForm = () => {
 const ProfilePage = () => {
   const { user, loading: userLoading } = useUser();
   const firestore = useFirestore();
+  const { toast } = useToast();
+  const [resendLoading, setResendLoading] = useState(false);
 
   const resultsQuery = useMemoFirebase(() => {
     if (!user || !firestore) return null;
@@ -352,6 +354,27 @@ const ProfilePage = () => {
   const { data: results, isLoading: resultsLoading } = useCollection(resultsQuery);
 
   const loading = userLoading || (user && resultsLoading);
+
+  const handleResendVerification = async () => {
+    setResendLoading(true);
+    try {
+        await resendVerificationEmail();
+        toast({
+            title: "تم إرسال البريد الإلكتروني",
+            description: "تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.",
+        });
+    } catch (error) {
+        toast({
+            variant: 'destructive',
+            title: "حدث خطأ",
+            description: "لم نتمكن من إرسال البريد الإلكتروني. يرجى المحاولة مرة أخرى لاحقًا.",
+        });
+        console.error(error);
+    } finally {
+        setResendLoading(false);
+    }
+  }
+
 
   if (loading) {
     return (
@@ -404,9 +427,19 @@ const ProfilePage = () => {
                     </div>
                 </div>
                  {!user.emailVerified && (
-                    <div className='text-sm text-yellow-400 bg-yellow-400/10 border border-yellow-400/50 rounded-md p-3 flex items-center gap-2'>
-                        <Mail className='w-4 h-4'/>
-                        <span>بريدك الإلكتروني غير مُفعَّل. يرجى التحقق من صندوق الوارد الخاص بك.</span>
+                    <div className='text-sm text-yellow-400 bg-yellow-400/10 border border-yellow-400/50 rounded-md p-3 flex items-center justify-between gap-4'>
+                        <div className='flex items-center gap-2'>
+                           <Mail className='w-4 h-4'/>
+                           <span>بريدك الإلكتروني غير مُفعَّل. يرجى التحقق من صندوق الوارد الخاص بك.</span>
+                        </div>
+                        <Button 
+                            variant="link" 
+                            className='p-0 h-auto text-yellow-300' 
+                            onClick={handleResendVerification}
+                            disabled={resendLoading}
+                        >
+                            {resendLoading ? 'جاري الإرسال...' : 'إعادة إرسال'}
+                        </Button>
                     </div>
                 )}
             </div>
@@ -446,5 +479,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-
-    
