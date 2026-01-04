@@ -37,19 +37,20 @@ const LessonPage = ({ params }: LessonPageProps) => {
             <span>العودة للدروس</span>
           </Link>
         </Button>
-        <PageTitle title={lesson.title} className="mb-0" />
-        <div className="w-32"></div>
+        <PageTitle title={lesson.title} className="mb-0 text-center" />
+        <div className="w-36 md:w-48"></div> {/* Spacer */}
       </div>
       
       <Card className={glassCardClasses}>
         {lesson.imageUrl && (
-            <div className="relative w-full h-64">
+            <div className="relative w-full h-48 md:h-64">
                 <Image
                     src={lesson.imageUrl}
                     alt={lesson.title}
                     data-ai-hint={lesson.imageHint || 'abstract'}
                     fill
                     className="object-cover rounded-t-2xl"
+                    priority
                 />
             </div>
         )}
@@ -65,3 +66,5 @@ const LessonPage = ({ params }: LessonPageProps) => {
 };
 
 export default LessonPage;
+
+    

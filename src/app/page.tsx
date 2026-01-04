@@ -19,7 +19,7 @@ const features = [
   {
     icon: <Trophy className="w-8 h-8 text-primary" />,
     title: 'مسائل أولمبياد',
-    description: 'تحدَّ نفسك مع مسائل صعبة من مسابقات الرياضيات لتعزيز مهاراتك.',
+    description: 'تحدَّ نفسك مع مسائل صعبة من مسابقات الرياضيات لتعزيز مهاراتك.',
     href: '/olympiad',
   },
   {
@@ -63,7 +63,7 @@ export default function Home() {
         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
           انطلق في رحلة تعلم فريدة مع دروس تفاعلية، وأدوات حسابية قوية، ومقالات علمية تثري معرفتك. مصمم خصيصًا لطلاب السنة الثانية ثانوي.
         </p>
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           <Button asChild size="lg" className="font-bold text-lg">
             <Link href="/lessons">ابدأ التعلم الآن</Link>
           </Button>
@@ -77,14 +77,14 @@ export default function Home() {
         {features.map((feature) => (
           <Link href={feature.href} key={feature.title} className="block group">
             <Card className={glassCardClasses}>
-              <CardHeader>
+              <CardHeader className='items-center'>
                 {feature.icon}
                 <CardTitle className="font-headline text-2xl mt-4">{feature.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base text-slate-400">{feature.description}</CardDescription>
-                <div className="flex items-center justify-start mt-6 text-primary font-semibold group-hover:translate-x-1 transition-transform">
-                  <MoveLeft className="w-4 h-4 ml-2" />
+                <CardDescription className="text-base text-slate-400 text-center">{feature.description}</CardDescription>
+                <div className="flex items-center justify-center mt-6 text-primary font-semibold group-hover:gap-3 transition-all duration-300">
+                  <MoveLeft className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <span>استكشف الميزة</span>
                 </div>
               </CardContent>
@@ -95,3 +95,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

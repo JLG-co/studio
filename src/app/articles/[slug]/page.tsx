@@ -38,14 +38,14 @@ const ArticlePage = ({ params }: ArticlePageProps) => {
             <span>العودة للمقالات</span>
           </Link>
         </Button>
-        <PageTitle title={article.title} className="mb-0" />
-        <div className="w-36"></div>
+        <PageTitle title={article.title} className="mb-0 text-center" />
+        <div className="w-36 md:w-48"></div> {/* Spacer */}
       </div>
 
       <Card className={glassCardClasses}>
         <CardContent className="p-6 md:p-8">
           {article.imageUrl && (
-              <div className="relative w-full md:w-1/3 max-w-sm h-64 float-left ml-6 mb-4 rounded-lg overflow-hidden">
+              <div className="relative w-full md:w-1/3 max-w-sm h-64 float-left ml-6 mb-4 rounded-lg overflow-hidden border-2 border-cyan-300/20">
                   <Image
                       src={article.imageUrl}
                       alt={article.title}
@@ -66,3 +66,5 @@ const ArticlePage = ({ params }: ArticlePageProps) => {
 };
 
 export default ArticlePage;
+
+    
