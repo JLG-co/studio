@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemoFirebase, useState } from 'react';
+import { useState } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LogIn, LogOut, UserPlus, BarChart } from 'lucide-react';
-import { useUser, useFirestore, useCollection } from '@/firebase';
+import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { signInWithEmail, signUpWithEmail, signOutUser } from '@/firebase/auth/auth-service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -72,7 +72,8 @@ const AuthForm = () => {
                 description: "يمكنك الآن تسجيل الدخول.",
             });
         } catch (error: any) {
-             setAuthError(error.message || "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.");
+             const message = (error.message || "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.").replace("Firebase: ", "").replace(`Error (auth/email-already-in-use).`, "هذا البريد مستخدم بالفعل");
+             setAuthError(message);
             console.error(error);
         } finally {
             setLoading(false);
@@ -285,5 +286,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-
-    
