@@ -21,35 +21,40 @@ export const signUpWithEmail = async (email: string, password: string, displayNa
   if (!auth || !firestore) {
     throw new Error('Firebase not initialized');
   }
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  const user = userCredential.user;
   
-  // Update the user's profile with the display name
-  await updateProfile(user, { displayName });
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    
+    // Update the user's profile with the display name
+    await updateProfile(user, { displayName });
 
-  // Create a user document in Firestore
-  const userDocRef = doc(firestore, 'users', user.uid);
-  const profileData = {
-    id: user.uid,
-    displayName: displayName,
-    email: user.email,
-    createdAt: serverTimestamp(),
-    score: 0,
-    avatarUrl: `https://picsum.photos/seed/${user.uid}/100/100`
-  };
+    // Create a user document in Firestore
+    const userDocRef = doc(firestore, 'users', user.uid);
+    const profileData = {
+      id: user.uid,
+      displayName: displayName,
+      email: user.email,
+      createdAt: serverTimestamp(),
+      score: 0,
+      avatarUrl: `https://picsum.photos/seed/${user.uid}/100/100`
+    };
 
-  setDoc(userDocRef, profileData)
-    .catch(async (serverError) => {
-        const permissionError = new FirestorePermissionError({
-            path: userDocRef.path,
-            operation: 'create',
-            requestResourceData: profileData,
-        });
-        errorEmitter.emit('permission-error', permissionError);
-    });
+    setDoc(userDocRef, profileData)
+      .catch(async (serverError) => {
+          const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'create',
+              requestResourceData: profileData,
+          });
+          errorEmitter.emit('permission-error', permissionError);
+      });
 
-
-  return userCredential;
+    return userCredential;
+  } catch (error) {
+    // Re-throw the error to be caught by the calling form
+    throw error;
+  }
 };
 
 export const signInWithEmail = async (email: string, password: string) => {
