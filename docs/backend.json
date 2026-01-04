@@ -227,6 +227,33 @@
         }
       },
       "required": ["id", "chatId", "role", "content", "createdAt"]
+    },
+    "Suggestion": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Suggestion",
+      "type": "object",
+      "description": "Represents an article suggestion submitted by a user.",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who submitted the suggestion."
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "The email of the user who submitted the suggestion.",
+          "format": "email"
+        },
+        "suggestion": {
+          "type": "string",
+          "description": "The content of the user's suggestion."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the suggestion was created.",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "userEmail", "suggestion", "createdAt"]
     }
   },
   "auth": {
@@ -330,6 +357,17 @@
             { "name": "chatId", "description": "The chat session's ID." },
             { "name": "messageId", "description": "The message's ID." }
           ]
+        }
+      },
+      {
+        "path": "/suggestions/{suggestionId}",
+        "definition": {
+            "entityName": "Suggestion",
+            "schema": { "$ref": "#/backend/entities/Suggestion" },
+            "description": "Stores user-submitted article suggestions.",
+            "params": [
+                { "name": "suggestionId", "description": "The unique ID for the suggestion." }
+            ]
         }
       }
     ],

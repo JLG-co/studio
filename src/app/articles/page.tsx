@@ -1,18 +1,51 @@
+'use client';
 import PageTitle from "@/components/page-title";
 import { articles } from "@/lib/data";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { MoveLeft } from "lucide-react";
+import { MoveLeft, PlusCircle } from "lucide-react";
+import SuggestArticleDialog from "./SuggestArticleDialog";
+import { useUser } from "@/firebase";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg transition-all duration-300 hover:border-cyan-300/20 hover:shadow-cyan-300/10 hover:-translate-y-1';
 
 const ArticlesPage = () => {
+  const { user } = useUser();
+  
   return (
     <div>
-      <PageTitle 
-        title="مقالات علمية"
-        subtitle="استكشف كيف تشكل الرياضيات عالمنا من خلال مقالات معمقة حول تطبيقاتها في مجالات متنوعة ومثيرة."
-      />
+      <div className="flex justify-between items-center mb-12">
+        <div className="flex-1"></div>
+        <div className="flex-1 text-center">
+            <PageTitle 
+              title="مقالات علمية"
+              subtitle="استكشف كيف تشكل الرياضيات عالمنا من خلال مقالات معمقة حول تطبيقاتها في مجالات متنوعة ومثيرة."
+              className="mb-0"
+            />
+        </div>
+        <div className="flex-1 flex justify-end">
+          <SuggestArticleDialog user={user}>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" disabled={!user}>
+                    <PlusCircle className="w-4 h-4 ml-2" />
+                    اقترح مقالاً
+                  </Button>
+                </TooltipTrigger>
+                {!user && (
+                  <TooltipContent>
+                    <p>يجب تسجيل الدخول لاقتراح مقال</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
+          </SuggestArticleDialog>
+        </div>
+      </div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {articles.map((article) => (
