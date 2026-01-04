@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveRight, PencilRuler, Trophy, ScrollText } from 'lucide-react';
+import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveLeft, PencilRuler, Trophy, ScrollText } from 'lucide-react';
 import Link from 'next/link';
 
 const features = [
@@ -48,7 +48,7 @@ const features = [
   },
 ];
 
-const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg transition-all duration-300 hover:border-cyan-300/20 hover:shadow-cyan-300/10';
+const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg transition-all duration-300 hover:border-cyan-300/20 hover:shadow-cyan-300/10 hover:-translate-y-1';
 
 export default function Home() {
   return (
@@ -77,15 +77,15 @@ export default function Home() {
         {features.map((feature) => (
           <Link href={feature.href} key={feature.title} className="block group">
             <Card className={glassCardClasses}>
-              <CardHeader className="flex-row items-center gap-4 space-y-0">
+              <CardHeader>
                 {feature.icon}
-                <CardTitle className="font-headline text-2xl text-right">{feature.title}</CardTitle>
+                <CardTitle className="font-headline text-2xl mt-4">{feature.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base text-slate-400 text-right">{feature.description}</CardDescription>
-                <div className="flex items-center justify-end mt-4 text-primary font-semibold group-hover:translate-x-[-4px] transition-transform">
-                  <span>استكشف</span>
-                  <MoveRight className="w-4 h-4 mr-2" />
+                <CardDescription className="text-base text-slate-400">{feature.description}</CardDescription>
+                <div className="flex items-center justify-start mt-6 text-primary font-semibold group-hover:translate-x-1 transition-transform">
+                  <MoveLeft className="w-4 h-4 ml-2" />
+                  <span>استكشف الميزة</span>
                 </div>
               </CardContent>
             </Card>
