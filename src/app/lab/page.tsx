@@ -19,7 +19,7 @@ const LabPage = () => {
         subtitle="مجموعة من الأدوات التفاعلية لمساعدتك على تصور وحل المشكلات الرياضية المعقدة."
       />
       <Tabs defaultValue="chatbot" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 bg-white/5 border border-cyan-300/10 h-auto">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 bg-white/5 border border-cyan-300/10 h-auto flex-wrap">
           <TabsTrigger value="chatbot" className="font-headline py-2">رفيقك الذكي</TabsTrigger>
           <TabsTrigger value="grapher" className="font-headline py-2">راسم الدوال</TabsTrigger>
           <TabsTrigger value="solver" className="font-headline py-2">حل معادلة الدرجة الثانية</TabsTrigger>

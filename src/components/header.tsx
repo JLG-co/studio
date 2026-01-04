@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Menu, User } from 'lucide-react';
+import { Menu, User, ScrollText } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -18,6 +18,7 @@ const navLinks = [
   { href: '/lab', label: 'المختبر' },
   { href: '/articles', label: 'المقالات' },
   { href: '/adaptive-learning', label: 'التعلم التكيفي' },
+  { href: '/changelog', label: 'التحديثات' },
   { href: '/about', label: 'عن المطور' },
 ];
 
@@ -57,7 +58,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
               <NavLink key={link.href} {...link} />
             ))}
@@ -72,7 +73,7 @@ const Header = () => {
             </Button>
 
             {/* Mobile Navigation */}
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon">

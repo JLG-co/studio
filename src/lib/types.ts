@@ -61,3 +61,13 @@ export interface LeaderboardUser {
   score: number;
   avatarUrl: string;
 }
+
+export interface ChangelogEntry {
+  version: string;
+  date: string;
+  title: string;
+  changes: {
+    type: 'new' | 'fix' | 'improvement';
+    description: string;
+  }[];
+}
