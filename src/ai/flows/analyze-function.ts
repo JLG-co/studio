@@ -39,7 +39,7 @@ Provide the following properties in the output format:
 1.  **Domain (مجال التعريف)**: The set of all possible input values (x-values). Use interval notation.
 2.  **Range (المدى)**: The set of all possible output values (y-values). Use interval notation.
 3.  **Derivative (المشتقة)**: The first derivative of the function, f'(x).
-4.  **Variations (تغيرات الدالة)**: A brief summary in Arabic of where the function is increasing or decreasing, and identify any vertical or horizontal asymptotes.
+4.  **تغيرات الدالة**: A brief summary in Arabic of where the function is increasing or decreasing (using the term 'المجال' for 'domain' or 'interval'), and identify any vertical or horizontal asymptotes.
 `,
 });
 
