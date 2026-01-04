@@ -43,10 +43,10 @@ const MathChatbot = () => {
     scrollToBottom();
   }, [messages]);
 
-  const saveMessage = (message: ChatMessage) => {
-    if (!user || !chatId || !firestore) return;
+  const saveMessage = (message: ChatMessage, currentChatId: string) => {
+    if (!user || !firestore) return;
 
-    const messagesCol = collection(firestore, `users/${user.uid}/chats/${chatId}/messages`);
+    const messagesCol = collection(firestore, `users/${user.uid}/chats/${currentChatId}/messages`);
     const messageData = {
       ...message,
       createdAt: serverTimestamp(),
@@ -71,11 +71,12 @@ const MathChatbot = () => {
     // Create a new chat session if one doesn't exist
     if (!currentChatId) {
       try {
-        const chatRef = await addDoc(collection(firestore, `users/${user.uid}/chats`), {
+        const chatDoc = {
             startedAt: serverTimestamp(),
             topic: input.substring(0, 30),
             userId: user.uid,
-        });
+        };
+        const chatRef = await addDoc(collection(firestore, `users/${user.uid}/chats`), chatDoc);
         currentChatId = chatRef.id;
         setChatId(currentChatId);
       } catch (e) {
@@ -90,7 +91,7 @@ const MathChatbot = () => {
     }
     
     const userMessage: ChatMessage = { role: 'user', content: input };
-    saveMessage(userMessage);
+    saveMessage(userMessage, currentChatId);
 
     const currentMessages = messages ? [...messages, userMessage] : [userMessage];
     
@@ -102,11 +103,11 @@ const MathChatbot = () => {
         messages: currentMessages,
         user: user ? { displayName: user.displayName || 'User' } : undefined,
       });
-      saveMessage(botResponse);
+      if(currentChatId) saveMessage(botResponse, currentChatId);
     } catch (error: any) {
       console.error(error);
       const errorMessage: ChatMessage = { role: 'bot', content: 'عذراً، حدث خطأ أثناء التواصل مع رفيقك الذكي. يرجى المحاولة مرة أخرى.' };
-      saveMessage(errorMessage);
+      if(currentChatId) saveMessage(errorMessage, currentChatId);
     } finally {
       setIsLoading(false);
     }
@@ -136,7 +137,7 @@ const MathChatbot = () => {
                     <Loader2 size={48} className="animate-spin mb-4" />
                     <p className="text-lg">جاري تحميل المحادثات...</p>
                 </div>
-            ): messages && messages.length === 0 ? (
+            ): messages && messages.length === 0 && !messagesLoading ? (
                 <div className="h-full flex flex-col justify-center items-center text-center text-slate-400">
                     <Bot size={48} className="mb-4" />
                     <p className="text-lg">مرحباً! أنا هنا لمساعدتك في الرياضيات.</p>
@@ -174,11 +175,11 @@ const MathChatbot = () => {
                 }
               }}
               placeholder={user ? "اكتب سؤالك هنا..." : "الرجاء تسجيل الدخول أولاً"}
-              className="flex-1 resize-none bg-background/50 text-lg p-3 min-h-[48px]"
+              className="flex-1 resize-none bg-background/50 text-lg p-3 min-h-0"
               rows={1}
               disabled={!user || isLoading}
             />
-            <Button type="submit" disabled={!user || isLoading || !input.trim()} size="icon" className="h-12 w-12 flex-shrink-0">
+            <Button type="submit" disabled={!user || isLoading || !input.trim()} size="icon" className="h-full w-12 flex-shrink-0 aspect-square">
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <SendHorizonal className="w-5 h-5" />}
             </Button>
           </form>
