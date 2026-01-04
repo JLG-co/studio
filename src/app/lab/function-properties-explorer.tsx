@@ -89,7 +89,7 @@ const FunctionPropertiesExplorer = () => {
                 <p className="font-mono text-lg text-slate-200 dir-ltr text-left">{result.derivative}</p>
             </div>
              <div className="bg-gray-900/50 p-4 rounded-lg">
-                <h3 className="font-headline text-lg text-primary mb-2">تحليل السلوك</h3>
+                <h3 className="font-headline text-lg text-primary mb-2">تغيرات الدالة</h3>
                 <p className="text-slate-300">{result.behavior}</p>
             </div>
           </div>

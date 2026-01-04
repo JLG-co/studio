@@ -19,7 +19,7 @@ const AnalyzeFunctionOutputSchema = z.object({
   domain: z.string().describe('The domain of the function in interval notation. Example: "(-∞, 2) U (2, +∞)". Write it in Arabic if possible. For example: "R \\ {2}"'),
   range: z.string().describe('The range of the function in interval notation. Example: "[0, +∞)". Write it in Arabic if possible. For example: "[0, +∞)"'),
   derivative: z.string().describe('The first derivative of the function. Example: "2x" or "-1/(x-2)^2"'),
-  behavior: z.string().describe('A brief analysis of the function\'s behavior, including increasing/decreasing intervals and any asymptotes, in Arabic.'),
+  behavior: z.string().describe('A brief analysis of the function\'s variations, including increasing/decreasing intervals and any asymptotes, in Arabic.'),
 });
 export type AnalyzeFunctionOutput = z.infer<typeof AnalyzeFunctionOutputSchema>;
 
@@ -39,7 +39,7 @@ Provide the following properties in the output format:
 1.  **Domain (مجال التعريف)**: The set of all possible input values (x-values). Use interval notation.
 2.  **Range (المدى)**: The set of all possible output values (y-values). Use interval notation.
 3.  **Derivative (المشتقة)**: The first derivative of the function, f'(x).
-4.  **Behavior (تحليل السلوك)**: A brief summary in Arabic of where the function is increasing or decreasing, and identify any vertical or horizontal asymptotes.
+4.  **Variations (تغيرات الدالة)**: A brief summary in Arabic of where the function is increasing or decreasing, and identify any vertical or horizontal asymptotes.
 `,
 });
 
