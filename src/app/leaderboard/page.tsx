@@ -17,13 +17,12 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Crown, LogIn, Medal, Trophy } from 'lucide-react';
+import { Crown, LogIn, Medal, Trophy, CheckCircle } from 'lucide-react';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { leaderboardUsers } from '@/lib/data';
 
 const glassCardClasses =
   'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
@@ -157,6 +156,9 @@ const LeaderboardPage = () => {
                         </AvatarFallback>
                       </Avatar>
                       <span className="font-medium text-white">{u.displayName}</span>
+                      {u.displayName === 'Abdeldjalil Gouneiber' && (
+                        <CheckCircle className="w-5 h-5 text-blue-400" title="مطور" />
+                      )}
                     </div>
                   </TableCell>
                   <TableCell className="text-right font-bold text-lg text-primary">
