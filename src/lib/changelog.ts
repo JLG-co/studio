@@ -3,6 +3,25 @@ import { ChangelogEntry } from './types';
 export const changelog: ChangelogEntry[] = [
     {
         version: "1.2.0",
+        date: "2026-01-04",
+        title: "إضافة نظام الحسابات وتتبع التقدم",
+        changes: [
+            {
+                type: 'new',
+                description: "يمكنك الآن إنشاء حساب شخصي باستخدام البريد الإلكتروني لتسجيل الدخول وحفظ تقدمك.",
+            },
+            {
+                type: 'new',
+                description: "تم إطلاق صفحة الملف الشخصي لعرض نتائج التمارين التي أكملتها.",
+            },
+            {
+                type: 'improvement',
+                description: "تم ربط قائمة المتصدرين بنظام النقاط الجديد، حيث يتم تحديث نتيجتك تلقائيًا.",
+            },
+        ],
+    },
+    {
+        version: "1.1.0",
         date: "2025-12-27",
         title: "إطلاق الذكاء الاصطناعي والميزات الاجتماعية",
         changes: [
@@ -18,10 +37,6 @@ export const changelog: ChangelogEntry[] = [
                 type: 'new',
                 description: "تمت إضافة قائمة المتصدرين! تنافس مع الطلاب الآخرين واكسب النقاط عن طريق حل التمارين.",
             },
-             {
-                type: 'new',
-                description: "يمكنك الآن إنشاء حساب وتتبع نتائج تمارينك في صفحة ملفك الشخصي.",
-            },
             {
                 type: 'improvement',
                 description: "أصبح الشات بوت الآن مساعدًا عامًا مع خبرة في الرياضيات، وقادرًا على الإجابة على مجموعة واسعة من الأسئلة.",
@@ -29,7 +44,7 @@ export const changelog: ChangelogEntry[] = [
         ],
     },
     {
-        version: "1.1.0",
+        version: "1.0.1",
         date: "2025-12-24",
         title: "تقديم مختبر الحساب",
         changes: [
@@ -39,7 +54,7 @@ export const changelog: ChangelogEntry[] = [
             },
             {
                 type: 'improvement',
-                description: "تم وضع أدوات الذكاء الاصطناعي (الشات بوت، محلل الدوال) قيد الاختبار التجريبي.",
+                description: "تم وضع أدوات الذكاء الاصطناعي الأولية قيد الاختبار التجريبي.",
             },
         ],
     },
