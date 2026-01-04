@@ -61,7 +61,7 @@ export default function Home() {
           رفيقك الأمثل لإتقان الرياضيات
         </p>
         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-          انطلق في رحلة تعلم فريدة مع دروس تفاعلية، أدوات حسابية قوية، ومقالات علمية تثري معرفتك. مصمم خصيصًا لطلاب السنة الثانية ثانوي.
+          انطلق في رحلة تعلم فريدة مع دروس تفاعلية، وأدوات حسابية قوية، ومقالات علمية تثري معرفتك. مصمم خصيصًا لطلاب السنة الثانية ثانوي.
         </p>
         <div className="flex justify-center gap-4">
           <Button asChild size="lg" className="font-bold text-lg">

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Award, BrainCircuit, GitFork, ShieldCheck } from 'lucide-react';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const glassCardClasses =
   'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
@@ -33,6 +34,8 @@ const achievements = [
     },
 ];
 
+const developerImage = PlaceHolderImages.find(p => p.id === 'abdeldjalil-gouneiber');
+
 
 const AboutPage = () => {
   return (
@@ -46,13 +49,15 @@ const AboutPage = () => {
           <CardContent className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div className="md:col-span-1 flex justify-center">
               <div className="relative w-[250px] h-[250px]">
-                <Image
-                  src="https://picsum.photos/seed/jlg/250/250"
-                  alt="Abdeldjalil Gouneiber"
-                  data-ai-hint="portrait man"
-                  fill
-                  className="rounded-2xl border-4 border-primary/50 object-cover shadow-lg"
-                />
+                {developerImage && (
+                  <Image
+                    src={developerImage.imageUrl}
+                    alt="Abdeldjalil Gouneiber"
+                    data-ai-hint={developerImage.imageHint}
+                    fill
+                    className="rounded-2xl border-4 border-primary/50 object-cover shadow-lg"
+                  />
+                )}
               </div>
             </div>
             <div className="md:col-span-2 space-y-6 text-center md:text-right">

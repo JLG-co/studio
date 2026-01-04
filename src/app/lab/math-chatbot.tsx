@@ -105,11 +105,7 @@ const MathChatbot = () => {
       saveMessage(botResponse);
     } catch (error: any) {
       console.error(error);
-      let content = 'عذراً، حدث خطأ أثناء التواصل مع رفيقك الذكي. يرجى المحاولة مرة أخرى.';
-      if (error.message?.includes('429 Too Many Requests')) {
-          content = 'لقد قمت بإرسال الكثير من الطلبات! يرجى الانتظار دقيقة قبل المحاولة مرة أخرى.';
-      }
-      const errorMessage: ChatMessage = { role: 'bot', content };
+      const errorMessage: ChatMessage = { role: 'bot', content: 'عذراً، حدث خطأ أثناء التواصل مع رفيقك الذكي. يرجى المحاولة مرة أخرى.' };
       saveMessage(errorMessage);
     } finally {
       setIsLoading(false);
