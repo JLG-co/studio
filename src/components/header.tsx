@@ -7,7 +7,6 @@ import { Menu, User, ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import Image from 'next/image';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +31,31 @@ const dropdownLinks = [
 ]
 
 const allLinks = [...mainNavLinks, ...dropdownLinks];
+
+const AgLogo = ({ size }: { size: number }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 100 100"
+    className="rounded-md"
+  >
+    <rect width="100" height="100" rx="20" className="fill-primary" />
+    <text
+      x="50%"
+      y="50%"
+      dominantBaseline="central"
+      textAnchor="middle"
+      fontFamily="Space Grotesk, sans-serif"
+      fontSize="60"
+      fontWeight="bold"
+      className="fill-primary-foreground"
+    >
+      AG
+    </text>
+  </svg>
+);
+
 
 const Header = () => {
   const pathname = usePathname();
@@ -75,13 +99,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="h-20 flex items-center justify-between bg-background/30 backdrop-blur-lg border-b border-cyan-300/10 rounded-b-2xl px-6">
           <Link href="/" className="flex items-center gap-3 font-headline text-2xl font-bold">
-            <Image
-                src="https://storage.googleapis.com/maker-studio-5f33a.appspot.com/users/user-lK2DvxQd2q2v62i3Y3dJ/studios/studio-1lF6t7l1v7j8n8s9k9h9/1723150536480-logo.png?alt=media"
-                alt="AG Logo"
-                width={40}
-                height={40}
-                className="rounded-md"
-            />
+            <AgLogo size={40} />
             <span className="hidden sm:inline">Math Companion Pro</span>
           </Link>
 
