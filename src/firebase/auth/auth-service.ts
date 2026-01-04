@@ -34,6 +34,8 @@ export const signUpWithEmail = async (email: string, password: string, displayNa
     displayName: displayName,
     email: user.email,
     createdAt: serverTimestamp(),
+    score: 0,
+    avatarUrl: `https://picsum.photos/seed/${user.uid}/100/100`
   };
 
   setDoc(userDocRef, profileData)

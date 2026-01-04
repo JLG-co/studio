@@ -113,9 +113,9 @@ service cloud.firestore {
      */
     match /users/{userId} {
       allow get: if isOwner(userId);
-      allow list: if false; // Disallow listing users for privacy.
-      allow create: if isOwner(userId);
-      allow update: if isExistingOwner(userId);
+      allow list: if isSignedIn(); // Allow signed-in users to list for leaderboard
+      allow create: if isOwner(userId) && hasConsistentUserId(userId);
+      allow update: if isExistingOwner(userId) && hasConsistentUserId(userId);
       allow delete: if isExistingOwner(userId);
 
       /**

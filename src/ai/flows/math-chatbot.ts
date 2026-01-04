@@ -14,12 +14,11 @@ import { z } from 'genkit';
 const ChatMessageSchema = z.object({
   role: z.enum(['user', 'bot']),
   content: z.string(),
-  isUser: z.boolean().optional(),
 });
 export type ChatMessage = z.infer<typeof ChatMessageSchema>;
 
 const MathChatbotInputSchema = z.object({
-  messages: z.array(ChatMessageSchema),
+  messages: z.array(ChatMessageSchema.extend({ isUser: z.boolean().optional() })),
   user: z.object({
     displayName: z.string(),
   }).optional(),
@@ -50,7 +49,7 @@ const prompt = ai.definePrompt({
   - You should be concise but thorough.
 
   {{#if user}}
-  - The user you are talking to is named {{user.displayName}}. Greet them by name when appropriate.
+  - The user you are talking to is named {{user.displayName}}. Greet them by name when appropriate, especially at the beginning of a conversation.
   {{/if}}
   
   Important Instructions:

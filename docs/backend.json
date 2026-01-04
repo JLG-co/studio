@@ -143,6 +143,15 @@
           "type": "string",
           "description": "Full name of the user."
         },
+        "score": {
+          "type": "number",
+          "description": "The user's total score for the leaderboard."
+        },
+        "avatarUrl": {
+            "type": "string",
+            "description": "URL for the user's avatar image.",
+            "format": "uri"
+        },
         "createdAt": {
           "type": "string",
           "description": "Timestamp indicating when the user account was created.",
@@ -158,6 +167,7 @@
         "id",
         "email",
         "name",
+        "score",
         "createdAt"
       ]
     }

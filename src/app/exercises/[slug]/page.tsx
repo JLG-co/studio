@@ -12,7 +12,7 @@ import { CheckCircle2, XCircle, ArrowLeft, RotateCw } from 'lucide-react';
 import PageTitle from '@/components/page-title';
 import Link from 'next/link';
 import { useUser, useFirestore } from '@/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, runTransaction, DocumentReference } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -36,6 +36,8 @@ const ExercisePage = () => {
     if (isFinished && user && firestore) {
       const saveResult = async () => {
         const percentage = Math.round((score / exerciseSet!.questions.length) * 100);
+        const pointsGained = score * 10; // e.g. 10 points per correct answer
+        
         const resultData = {
           userId: user.uid,
           exerciseSlug: slug,
@@ -45,20 +47,36 @@ const ExercisePage = () => {
           percentage: percentage,
           completedAt: serverTimestamp(),
         };
-        try {
-          const resultsCollection = collection(firestore, `users/${user.uid}/exerciseResults`);
-          addDoc(resultsCollection, resultData)
-            .catch(async (serverError) => {
-                const permissionError = new FirestorePermissionError({
-                    path: resultsCollection.path,
-                    operation: 'create',
-                    requestResourceData: resultData,
-                });
-                errorEmitter.emit('permission-error', permissionError);
-            });
 
-        } catch (error) {
-          console.error("Error saving exercise result: ", error);
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const resultsCollection = collection(firestore, `users/${user.uid}/exerciseResults`);
+        
+        // Save exercise result
+        addDoc(resultsCollection, resultData)
+          .catch(async (serverError) => {
+              const permissionError = new FirestorePermissionError({
+                  path: resultsCollection.path,
+                  operation: 'create',
+                  requestResourceData: resultData,
+              });
+              errorEmitter.emit('permission-error', permissionError);
+          });
+          
+        // Update total score in a transaction
+        try {
+            await runTransaction(firestore, async (transaction) => {
+                const userDoc = await transaction.get(userDocRef);
+                const currentScore = userDoc.data()?.score || 0;
+                transaction.update(userDocRef, { score: currentScore + pointsGained });
+            });
+        } catch (e) {
+             console.error("Transaction failed: ", e);
+             const permissionError = new FirestorePermissionError({
+                path: userDocRef.path,
+                operation: 'update',
+                requestResourceData: { score: `currentScore + ${pointsGained}` },
+            });
+            errorEmitter.emit('permission-error', permissionError);
         }
       };
 
@@ -110,7 +128,10 @@ const ExercisePage = () => {
                     <p className="text-xl text-slate-300">
                         لقد أجبت بشكل صحيح على {score} من أصل {exerciseSet.questions.length} أسئلة.
                     </p>
-                    {user && <p className='text-slate-400'>تم حفظ نتيجتك في ملفك الشخصي.</p>}
+                    <p className="text-2xl font-bold text-yellow-400">
+                        +{score * 10} نقطة!
+                    </p>
+                    {user && <p className='text-slate-400'>تم تحديث نتيجتك في ملفك الشخصي ولوحة المتصدرين.</p>}
                     <div className="flex justify-center gap-4">
                         <Button onClick={handleRestart}>
                             <RotateCw className="w-4 h-4 ml-2" />
