@@ -1,33 +1,169 @@
-rules_version = '2';
+/**
+ * This ruleset enforces a security model that segregates public, read-only
+ * educational content from private, user-specific data. It's designed for rapid
+ * prototyping, strictly controlling authorization while remaining flexible on
+ * data shapes.
+ *
+ * Core Philosophy:
+ * The security model is split into two distinct categories:
+ * 1. Public Content (`/lessons`, `/articles`): This data is readable by anyone,
+ *    including unauthenticated users, to allow for broad access to educational
+ *    materials. All write operations (create, update, delete) on this content are
+ *    currently disabled pending the implementation of an administrative role system.
+ * 2. Private User Data (`/users/{userId}`): All data under a user's path,
+ *    including their profile and progress, is strictly owned. Only the authenticated
+ *    user can read or write their own information.
+ *
+ * Data Structure:
+ * The data is organized into three top-level collections: `/users`, `/lessons`, and
+ * `/articles`. User-specific progress information is nested in a subcollection
+ * as `/users/{userId}/progress/{progressId}`, which leverages path-based security
+ * to ensure privacy and ownership.
+ *
+ * Key Security Decisions:
+ * - User Listing Disabled: To protect user privacy, it is not possible to list
+ *   all documents in the `/users` collection.
+ * - Admin-Managed Content: Write access to global content collections (`/lessons`
+ *   and `/articles`) is locked down. A `TODO` is included to guide the
+ *   implementation of an admin-only write rule.
+ * - Path-Based Ownership: User data and subcollections are secured using the
+ *   `userId` from the document path, which is the most secure and performant
+ *   method for enforcing ownership.
+ *
+ * Denormalization for Authorization:
+ * To ensure fast and simple authorization checks, rules rely on data within the
+ * document being accessed. For example, when creating a user's profile document or
+ * progress entry, the rules validate that an internal `id` or `userId` field
+ * matches the `userId` in the document path. This enforces relational integrity
+ * at the time of creation without requiring slow or costly lookups.
+ *
+ * Structural Segregation:
+ * Private user data (`/users/{userId}/...`) is structurally separated from public
+ * content (`/lessons`, `/articles`). This clean separation allows for simple,
 
+ * collection-wide security rules (e.g., "allow public read" or "allow owner read")
+ * that are easy to understand and hard to misconfigure.
+ */
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions
+    // =====================================================================
+    // Helper Functions
+    // =====================================================================
+
+    /**
+     * Checks if a user is authenticated.
+     */
     function isSignedIn() {
       return request.auth != null;
     }
 
+    /**
+     * Checks if the currently authenticated user's UID matches the provided userId.
+     * This is the foundation of the user-ownership security model.
+     * @param userId The UID to check against the request's authentication.
+     */
     function isOwner(userId) {
-      return request.auth.uid == userId;
+      return isSignedIn() && request.auth.uid == userId;
     }
 
-    // USERS
+    /**
+     * Checks if a document exists AND if the current user is the owner.
+     * Used for safe update and delete operations.
+     * @param userId The UID of the document's owner.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * Validates that the user document's internal `id` is consistent with its path.
+     * This is crucial for maintaining relational integrity on create and update.
+     */
+    function hasConsistentUserId(userId) {
+      // On create, the incoming document's id must match the path's userId.
+      // On update, the id field must be immutable.
+      return request.resource.data.id == userId
+             && (resource == null || request.resource.data.id == resource.data.id);
+    }
+
+    /**
+     * Validates that a subcollection document's internal `userId` is consistent.
+     * Enforces that progress data is always correctly linked to its parent user.
+     */
+    function hasConsistentParentUserId(userId) {
+      // On create, the incoming document's userId must match the path's userId.
+      // On update, the userId field must be immutable.
+      return request.resource.data.userId == userId
+             && (resource == null || request.resource.data.userId == resource.data.userId);
+    }
+
+
+    // =====================================================================
+    // Collection Rules
+    // =====================================================================
+
+    /**
+     * @description Manages user profile documents.
+     * @path /users/{userId}
+     * @allow (create) An authenticated user can create their own profile document.
+     * @deny (get) A user cannot read another user's profile.
+     * @principle Restricts access to a user's own data tree.
+     */
     match /users/{userId} {
-      // Anyone can read user profiles
-      allow get: if true;
-      // Users can create and update their own profiles
-      allow create, update: if isSignedIn() && isOwner(userId);
+      allow get: if isOwner(userId);
+      allow list: if false; // Disallow listing users for privacy.
+      allow create: if isOwner(userId) && hasConsistentUserId(userId);
+      allow update: if isExistingOwner(userId) && hasConsistentUserId(userId);
+      allow delete: if isExistingOwner(userId);
+
+      /**
+       * @description Tracks a user's progress on lessons and articles.
+       * @path /users/{userId}/progress/{progressId}
+       * @allow (create, list) An authenticated user can create and list their own progress entries.
+       * @deny (update, delete) A user cannot modify another user's progress.
+       * @principle Enforces strict ownership within a user's data tree.
+       */
+      match /progress/{progressId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && hasConsistentParentUserId(userId);
+        allow update: if isExistingOwner(userId) && hasConsistentParentUserId(userId);
+        allow delete: if isExistingOwner(userId);
+      }
     }
 
-    // EXERCISE RESULTS
-    match /users/{userId}/exerciseResults/{resultId} {
-        // Users can read their own exercise results
-        allow get, list: if isSignedIn() && isOwner(userId);
-        // Users can create their own exercise results
-        allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == request.auth.uid;
-        // Users cannot update or delete past results
-        allow update, delete: if false;
+    /**
+     * @description Stores global math lessons.
+     * @path /lessons/{lessonId}
+     * @allow (get, list) Any user, including unauthenticated ones, can read lessons.
+     * @deny (create, update, delete) All write operations are denied for users.
+     * @principle Provides public read access for global content, with writes reserved for admins.
+     */
+    match /lessons/{lessonId} {
+      allow get: if true;
+      allow list: if true;
+      // CRITICAL: Write operations are disabled. Implement admin role check here.
+      allow create: if false; // TODO: Change to `if isAdmin();`
+      allow update: if false; // TODO: Change to `if isAdmin();`
+      allow delete: if false; // TODO: Change to `if isAdmin();`
+    }
+
+    /**
+     * @description Stores global scientific articles.
+     * @path /articles/{articleId}
+     * @allow (get, list) Any user, including unauthenticated ones, can read articles.
+     * @deny (create, update, delete) All write operations are denied for users.
+     * @principle Provides public read access for global content, with writes reserved for admins.
+     */
+    match /articles/{articleId} {
+      allow get: if true;
+      allow list: if true;
+      // CRITICAL: Write operations are disabled. Implement admin role check here.
+      allow create: if false; // TODO: Change to `if isAdmin();`
+      allow update: if false; // TODO: Change to `if isAdmin();`
+      allow delete: if false; // TODO: Change to `if isAdmin();`
     }
   }
 }

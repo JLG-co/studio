@@ -1,80 +1,244 @@
 {
   "entities": {
-    "userProfile": {
-      "title": "User Profile",
-      "description": "Represents a user's profile information.",
+    "Lesson": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Lesson",
       "type": "object",
+      "description": "Represents a math lesson within the application.",
       "properties": {
-        "displayName": {
+        "id": {
           "type": "string",
-          "description": "The user's display name."
+          "description": "Unique identifier for the lesson."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the lesson."
+        },
+        "content": {
+          "type": "string",
+          "description": "The content of the lesson, likely stored as markdown or HTML."
+        },
+        "curriculumArea": {
+          "type": "string",
+          "description": "The specific area of the curriculum the lesson covers (e.g., Algebra, Geometry)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the lesson was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the lesson was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "content",
+        "curriculumArea",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Article": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Article",
+      "type": "object",
+      "description": "Represents a scientific article related to math applications.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the article."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the article."
+        },
+        "content": {
+          "type": "string",
+          "description": "The full content of the article, likely stored as markdown or HTML."
+        },
+        "domain": {
+          "type": "string",
+          "description": "The domain of science related to the article (e.g., Medicine, Cybersecurity)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the article was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the article was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "content",
+        "domain",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserProgress": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProgress",
+      "type": "object",
+      "description": "Represents a user's progress and interaction with the application's learning content.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user progress entry."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N UserProgress)"
+        },
+        "lessonId": {
+          "type": "string",
+          "description": "Reference to Lesson. (Relationship: Lesson 1:N UserProgress), ID of the lesson the user is interacting with."
+        },
+        "articleId": {
+          "type": "string",
+          "description": "Reference to Article. (Relationship: Article 1:N UserProgress), ID of the article the user is interacting with."
+        },
+        "progress": {
+          "type": "number",
+          "description": "A numerical value indicating the user's progress (e.g., percentage completed).",
+          "format": "double"
+        },
+        "lastAccessed": {
+          "type": "string",
+          "description": "Timestamp indicating when the user last accessed the content.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "progress",
+        "lastAccessed"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the application.  Authentication details are NOT stored here.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
         },
         "email": {
           "type": "string",
-          "format": "email",
-          "description": "The user's email address."
+          "description": "Email address of the user.",
+          "format": "email"
         },
-        "photoURL": {
+        "name": {
           "type": "string",
-          "format": "uri",
-          "description": "URL of the user's profile picture."
+          "description": "Full name of the user."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user account was created.",
+          "format": "date-time"
+        },
+        "lastLogin": {
+          "type": "string",
+          "description": "Timestamp indicating the user's last login.",
+          "format": "date-time"
         }
       },
-      "required": ["displayName", "email"]
-    },
-    "exerciseResult": {
-      "title": "Exercise Result",
-      "description": "Stores the result of a user completing an exercise set.",
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "The ID of the user who completed the exercise."
-        },
-        "exerciseSlug": {
-          "type": "string",
-          "description": "The slug of the completed exercise set."
-        },
-        "exerciseTitle": {
-          "type": "string",
-          "description": "The title of the completed exercise set."
-        },
-        "score": {
-          "type": "number",
-          "description": "The number of correctly answered questions."
-        },
-        "totalQuestions": {
-          "type": "number",
-          "description": "The total number of questions in the exercise."
-        },
-        "percentage": {
-          "type": "number",
-          "description": "The user's score as a percentage."
-        },
-        "completedAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "The timestamp when the exercise was completed."
-        }
-      },
-      "required": ["userId", "exerciseSlug", "exerciseTitle", "score", "totalQuestions", "percentage", "completedAt"]
+      "required": [
+        "id",
+        "email",
+        "name",
+        "createdAt"
+      ]
     }
   },
   "auth": {
-    "providers": ["password"]
+    "providers": [
+      "password",
+      "anonymous"
+    ]
   },
   "firestore": {
-    "/users/{userId}": {
-      "schema": {
-        "$ref": "#/entities/userProfile"
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles.  Access is restricted to the user themselves.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
       },
-      "description": "Stores public profile information for users."
-    },
-    "/users/{userId}/exerciseResults/{resultId}": {
-      "schema": {
-        "$ref": "#/entities/exerciseResult"
+      {
+        "path": "/lessons/{lessonId}",
+        "definition": {
+          "entityName": "Lesson",
+          "schema": {
+            "$ref": "#/backend/entities/Lesson"
+          },
+          "description": "Stores math lessons.  Read access is public, CUD (Create, Update, Delete) restricted to admins.",
+          "params": [
+            {
+              "name": "lessonId",
+              "description": "The unique identifier for the lesson."
+            }
+          ]
+        }
       },
-      "description": "Stores the results of exercises completed by a user."
-    }
+      {
+        "path": "/articles/{articleId}",
+        "definition": {
+          "entityName": "Article",
+          "schema": {
+            "$ref": "#/backend/entities/Article"
+          },
+          "description": "Stores scientific articles. Read access is public, CUD restricted to admins.",
+          "params": [
+            {
+              "name": "articleId",
+              "description": "The unique identifier for the article."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/progress/{progressId}",
+        "definition": {
+          "entityName": "UserProgress",
+          "schema": {
+            "$ref": "#/backend/entities/UserProgress"
+          },
+          "description": "Tracks user progress on lessons and articles. Only the user can access their own progress data.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "progressId",
+              "description": "The unique identifier for the user progress entry."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support the 'Math Companion Pro' application, focusing on lessons, scientific articles, user progress tracking, and user management. The structure prioritizes Authorization Independence via denormalization to ensure security rules are simple and robust. It also uses Structural Segregation to maintain a homogeneous security posture within each collection.  The design leverages path-based ownership for user-specific data and incorporates the membership map pattern where collaboration is needed.\n\n*   **/users/{userId}**: Stores user profiles. This collection utilizes path-based ownership, providing a clear and secure way to manage individual user data.  Each user document is uniquely identified by the `userId`.  Security rules will be implemented to ensure only the user can access their own document.\n*   **/lessons/{lessonId}**: Contains math lessons.  Lessons are globally accessible, implying read access for all users. Create, Update, and Delete (CUD) operations are restricted to authorized admins (not defined, but assumed for content management).\n*   **/articles/{articleId}**: Stores scientific articles related to math applications. Similar to lessons, articles are globally readable, with CUD operations restricted to admins.\n*   **/users/{userId}/progress/{progressId}**: Tracks user progress on lessons and articles. By nesting this data under `/users/{userId}`, we enforce ownership, ensuring a user can only access their own progress data. This structure enables efficient querying of a user's progress and maintains a clear parent-child relationship for security rules.\n\nThis structure achieves Authorization Independence by avoiding hierarchical authorization dependencies (no `get()` calls in rules).  User-specific data is segregated under the `/users/{userId}` path, ensuring that access control is based solely on the `request.auth.uid`. The structure supports the required QAPs by:\n\n*   Enabling secure `list` operations: Each collection has a clear security posture. Listing users is restricted. Lessons and articles could be listed with proper authorization checks (e.g., for admin users). User progress can be listed only within a specific user's scope.\n*   Enforcing invariants: Ownership of user progress is strictly maintained via path-based ownership."
   }
 }
