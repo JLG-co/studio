@@ -146,6 +146,31 @@ service cloud.firestore {
         allow update: if false; // Results are immutable
         allow delete: if false; // Results are immutable
       }
+
+      /**
+       * @description Stores a user's chat sessions.
+       * @path /users/{userId}/chats/{chatId}
+       * @allow (create, get, list) An authenticated user can manage their own chat sessions.
+       * @principle Enforces strict ownership for user-specific data.
+       */
+      match /chats/{chatId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId);
+        allow update, delete: if false; // Chat sessions are immutable
+
+        /**
+         * @description Stores messages within a chat session.
+         * @path /users/{userId}/chats/{chatId}/messages/{messageId}
+         * @allow (create, list) An authenticated user can add and read messages in their own chat.
+         * @principle Enforces strict ownership within a chat session.
+         */
+        match /messages/{messageId} {
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId);
+          allow get, update, delete: if false; // Messages are immutable
+        }
+      }
     }
 
     /**

@@ -39,7 +39,7 @@ const historyTemplate = `{{#each messages}}
 const prompt = ai.definePrompt({
   name: 'mathChatbotPrompt',
   input: { schema: MathChatbotInputSchema },
-  output: { schema: z.string() },
+  output: { schema: z.string().nullable() },
   prompt: `You are Math Companion Pro, a general-purpose, friendly, and knowledgeable AI assistant. Your primary expertise is mathematics, especially for 2nd-year secondary school students in an Arabic-speaking country, but you are capable of discussing a wide variety of topics.
 
   Your Persona:

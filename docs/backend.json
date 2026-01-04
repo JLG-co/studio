@@ -170,6 +170,63 @@
         "score",
         "createdAt"
       ]
+    },
+    "ChatSession": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ChatSession",
+      "type": "object",
+      "description": "Represents a single chat conversation session for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the chat session."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who owns this chat session."
+        },
+        "startedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the chat session started.",
+          "format": "date-time"
+        },
+        "topic": {
+          "type": "string",
+          "description": "A brief, auto-generated topic for the conversation."
+        }
+      },
+      "required": ["id", "userId", "startedAt"]
+    },
+    "ChatMessage": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ChatMessage",
+      "type": "object",
+      "description": "Represents a single message within a chat session.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the message."
+        },
+        "chatId": {
+          "type": "string",
+          "description": "The ID of the chat session this message belongs to."
+        },
+        "role": {
+          "type": "string",
+          "description": "The role of the message sender.",
+          "enum": ["user", "bot"]
+        },
+        "content": {
+          "type": "string",
+          "description": "The text content of the message."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the message was created.",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "chatId", "role", "content", "createdAt"]
     }
   },
   "auth": {
@@ -245,6 +302,31 @@
               "name": "progressId",
               "description": "The unique identifier for the user progress entry."
             }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/chats/{chatId}",
+        "definition": {
+          "entityName": "ChatSession",
+          "schema": { "$ref": "#/backend/entities/ChatSession" },
+          "description": "Stores a user's chat sessions.",
+          "params": [
+            { "name": "userId", "description": "The user's ID." },
+            { "name": "chatId", "description": "The chat session's ID." }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/chats/{chatId}/messages/{messageId}",
+        "definition": {
+          "entityName": "ChatMessage",
+          "schema": { "$ref": "#/backend/entities/ChatMessage" },
+          "description": "Stores messages for a specific chat session.",
+          "params": [
+            { "name": "userId", "description": "The user's ID." },
+            { "name": "chatId", "description": "The chat session's ID." },
+            { "name": "messageId", "description": "The message's ID." }
           ]
         }
       }
