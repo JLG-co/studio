@@ -3,7 +3,7 @@ import { ChangelogEntry } from './types';
 export const changelog: ChangelogEntry[] = [
     {
         version: "1.2.0",
-        date: "2024-08-12",
+        date: "2025-12-27",
         title: "إطلاق الذكاء الاصطناعي والميزات الاجتماعية",
         changes: [
             {
