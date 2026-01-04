@@ -17,7 +17,7 @@ const GenerateLessonPlanInputSchema = z.object({
 export type GenerateLessonPlanInput = z.infer<typeof GenerateLessonPlanInputSchema>;
 
 const GenerateLessonPlanOutputSchema = z.object({
-  lessonPlan: z.string().describe('The lesson plan outline in Arabic.'),
+  lessonPlan: z.string().describe('The lesson plan outline in structured Arabic Markdown format.'),
 });
 export type GenerateLessonPlanOutput = z.infer<typeof GenerateLessonPlanOutputSchema>;
 
@@ -29,9 +29,17 @@ const prompt = ai.definePrompt({
   name: 'generateLessonPlanPrompt',
   input: {schema: GenerateLessonPlanInputSchema},
   output: {schema: GenerateLessonPlanOutputSchema},
-  prompt: `You are an expert mathematics teacher specializing in the 2AS (second year of secondary education) curriculum.  You are fluent in Arabic.
+  prompt: `You are an expert mathematics teacher specializing in the 2AS (second year of secondary education) curriculum. You are fluent in Arabic.
 
 You will generate a lesson plan outline for the given mathematical concept in Arabic.
+
+The output must be in structured Markdown format. It should be well-organized, clear, and modern. Use headings, bold text, and bullet points to structure the plan.
+
+The plan should include the following sections:
+-   **### الأهداف (Objectives):** What students should be able to do.
+-   **### الوسائل التعليمية (Teaching Aids):** Tools needed.
+-   **### سير الدرس (Lesson Flow):** Step-by-step activities (e.g., introduction, core concepts, examples).
+-   **### تقييم (Evaluation):** How to assess student understanding.
 
 Concept: {{{concept}}}`,
 });

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Wand2, Loader2, BookCopy, FileText } from 'lucide-react';
+import { Wand2, Loader2, BookCopy } from 'lucide-react';
 import { generateLessonPlan, GenerateLessonPlanOutput } from '@/ai/flows/generate-lesson-plan';
 
 const LessonPlanGenerator = () => {
@@ -73,13 +73,11 @@ const LessonPlanGenerator = () => {
 
         {result && (
           <div className="pt-6 border-t border-white/10 space-y-4">
-              <div className="bg-gray-900/50 p-4 rounded-lg">
-                <h3 className="font-headline text-lg text-primary flex items-center gap-2 mb-2"><FileText /> خطة الدرس المقترحة</h3>
-                <div 
-                  className="prose prose-invert max-w-none text-slate-300 whitespace-pre-wrap"
-                  dangerouslySetInnerHTML={{ __html: result.lessonPlan }}
-                />
-            </div>
+              <h3 className="font-headline text-2xl text-primary flex items-center gap-2 mb-4"><BookCopy /> خطة الدرس المقترحة لـ "{concept}"</h3>
+              <div 
+                className="prose prose-invert max-w-none text-slate-300 bg-gray-900/50 p-6 rounded-lg"
+                dangerouslySetInnerHTML={{ __html: result.lessonPlan.replace(/\n/g, '<br />') }}
+              />
           </div>
         )}
       </CardContent>
