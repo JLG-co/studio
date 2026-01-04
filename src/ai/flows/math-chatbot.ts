@@ -82,9 +82,18 @@ const mathChatbotFlow = ai.defineFlow(
     
     const { output } = await prompt({messages: messagesWithIsUser, user: input.user});
     
+    let content: string;
+    if (typeof output === 'string') {
+      content = output;
+    } else if (output && typeof output === 'object' && 'type' in output && typeof (output as any).type === 'string') {
+      content = (output as any).type;
+    } else {
+      content = 'عذراً، لم أتمكن من معالجة طلبك في الوقت الحالي. يرجى المحاولة مرة أخرى.';
+    }
+
     return {
       role: 'bot',
-      content: output || 'عذراً، لم أتمكن من معالجة طلبك في الوقت الحالي. يرجى المحاولة مرة أخرى.',
+      content: content,
     };
   }
 );
