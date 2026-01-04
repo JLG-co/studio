@@ -55,8 +55,12 @@ const AuthForm = () => {
         try {
             await signInWithEmail(values.email, values.password);
         } catch (error: any) {
-            setAuthError(error.message || "فشل تسجيل الدخول. يرجى التحقق من بريدك الإلكتروني وكلمة المرور.");
-            console.error(error);
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                setAuthError("لا يوجد حساب مسجل بهذا البريد الإلكتروني. هل تريد إنشاء حساب جديد؟");
+            } else {
+                setAuthError("فشل تسجيل الدخول. يرجى التحقق من بريدك الإلكتروني وكلمة المرور.");
+            }
+            console.error("Login error:", error);
         } finally {
             setLoading(false);
         }
@@ -72,9 +76,13 @@ const AuthForm = () => {
                 description: "يمكنك الآن تسجيل الدخول.",
             });
         } catch (error: any) {
-             const message = (error.message || "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.").replace("Firebase: ", "").replace(`Error (auth/email-already-in-use).`, "هذا البريد مستخدم بالفعل");
-             setAuthError(message);
-            console.error(error);
+             if (error.code === 'auth/email-already-in-use') {
+                setAuthError("هذا البريد الإلكتروني مستخدم بالفعل. حاول تسجيل الدخول بدلاً من ذلك.");
+            } else {
+                const message = (error.message || "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.").replace("Firebase: ", "");
+                setAuthError(message);
+            }
+            console.error("Signup error:", error);
         } finally {
             setLoading(false);
         }
