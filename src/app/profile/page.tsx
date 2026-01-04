@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemoFirebase, useState } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -55,7 +55,7 @@ const AuthForm = () => {
         try {
             await signInWithEmail(values.email, values.password);
         } catch (error: any) {
-            setAuthError("فشل تسجيل الدخول. يرجى التحقق من بريدك الإلكتروني وكلمة المرور.");
+            setAuthError(error.message || "فشل تسجيل الدخول. يرجى التحقق من بريدك الإلكتروني وكلمة المرور.");
             console.error(error);
         } finally {
             setLoading(false);
@@ -72,11 +72,7 @@ const AuthForm = () => {
                 description: "يمكنك الآن تسجيل الدخول.",
             });
         } catch (error: any) {
-            if (error.code === 'auth/email-already-in-use') {
-                 setAuthError("هذا البريد الإلكتروني مستخدم بالفعل.");
-            } else {
-                 setAuthError(error.message || "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.");
-            }
+             setAuthError(error.message || "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.");
             console.error(error);
         } finally {
             setLoading(false);
@@ -195,7 +191,7 @@ const ProfilePage = () => {
   const { user, loading: userLoading } = useUser();
   const firestore = useFirestore();
 
-  const resultsQuery = useMemo(() => {
+  const resultsQuery = useMemoFirebase(() => {
     if (!user || !firestore) return null;
     return query(collection(firestore, `users/${user.uid}/exerciseResults`), orderBy('completedAt', 'desc'));
   }, [user, firestore]);
