@@ -24,7 +24,7 @@ const OlympiadProblemClient = ({ problem }: OlympiadProblemClientProps) => {
       </Card>
       
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="solution" className={`${glassCardClasses} border-b-0`}>
+        <AccordionItem value="solution" className={`${glassCardClasses} mt-8 border-b-0`}>
             <AccordionTrigger className="p-6 text-xl font-headline hover:no-underline">
                 <div className="flex items-center gap-2">
                     <Lightbulb className="w-6 h-6 text-yellow-400"/>

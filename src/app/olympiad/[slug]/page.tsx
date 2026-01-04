@@ -35,8 +35,8 @@ const OlympiadProblemPage = ({ params }: OlympiadProblemPageProps) => {
             <span>العودة للمسائل</span>
           </Link>
         </Button>
-        <PageTitle title={problem.title} className="mb-0" />
-        <div className="w-36"></div>
+        <PageTitle title={problem.title} className="mb-0 text-center" />
+        <div className="w-36 md:w-48"></div> {/* Spacer */}
       </div>
 
       <OlympiadProblemClient problem={problem} />
