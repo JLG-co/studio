@@ -10,14 +10,73 @@ import {
   updateProfile,
   sendEmailVerification,
   sendPasswordResetEmail,
+  OAuthProvider,
+  User,
 } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
 const { auth, firestore } = initializeFirebase();
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
+const appleProvider = new OAuthProvider('apple.com');
+
+
+const createUserProfileDocument = async (user: User) => {
+  if (!firestore) return;
+  const userDocRef = doc(firestore, 'users', user.uid);
+  const userDoc = await getDoc(userDocRef);
+
+  if (!userDoc.exists()) {
+    const profileData = {
+      id: user.uid,
+      displayName: user.displayName,
+      email: user.email,
+      createdAt: serverTimestamp(),
+      score: 0,
+      avatarUrl: user.photoURL || `https://picsum.photos/seed/${user.uid}/100/100`,
+    };
+
+    setDoc(userDocRef, profileData).catch(async (serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: userDocRef.path,
+        operation: 'create',
+        requestResourceData: profileData,
+      });
+      errorEmitter.emit('permission-error', permissionError);
+    });
+  }
+}
+
+export const signInWithGoogle = async () => {
+    if (!auth) throw new Error('Firebase not initialized');
+    try {
+        const result = await signInWithPopup(auth, googleProvider);
+        await createUserProfileDocument(result.user);
+        return result;
+    } catch (error) {
+        // Handle credential already in use error
+        if ((error as any).code === 'auth/credential-already-in-use') {
+            console.warn("Credential already in use. User might have signed up with a different method.");
+        }
+        throw error;
+    }
+}
+
+export const signInWithApple = async () => {
+    if (!auth) throw new Error('Firebase not initialized');
+    try {
+        const result = await signInWithPopup(auth, appleProvider);
+        await createUserProfileDocument(result.user);
+        return result;
+    } catch (error) {
+        if ((error as any).code === 'auth/credential-already-in-use') {
+            console.warn("Credential already in use. User might have signed up with a different method.");
+        }
+        throw error;
+    }
+}
 
 export const signUpWithEmail = async (email: string, password: string, displayName: string) => {
   if (!auth || !firestore) {
@@ -35,25 +94,7 @@ export const signUpWithEmail = async (email: string, password: string, displayNa
     await sendEmailVerification(user);
 
     // Create a user document in Firestore
-    const userDocRef = doc(firestore, 'users', user.uid);
-    const profileData = {
-      id: user.uid,
-      displayName: displayName,
-      email: user.email,
-      createdAt: serverTimestamp(),
-      score: 0,
-      avatarUrl: `https://picsum.photos/seed/${user.uid}/100/100`
-    };
-
-    setDoc(userDocRef, profileData)
-      .catch(async (serverError) => {
-          const permissionError = new FirestorePermissionError({
-              path: userDocRef.path,
-              operation: 'create',
-              requestResourceData: profileData,
-          });
-          errorEmitter.emit('permission-error', permissionError);
-      });
+    await createUserProfileDocument(user);
 
     return userCredential;
   } catch (error) {
@@ -89,3 +130,5 @@ export const sendPasswordReset = async (email: string) => {
   }
   return sendPasswordResetEmail(auth, email);
 };
+
+    
