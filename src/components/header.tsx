@@ -38,9 +38,28 @@ const AgLogo = ({ size }: { size: number }) => (
     width={size}
     height={size}
     viewBox="0 0 100 100"
-    className="rounded-md"
   >
-    <rect width="100" height="100" rx="20" className="fill-primary" />
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="5" result="coloredBlur" />
+        <feMerge>
+          <feMergeNode in="coloredBlur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    <rect width="100" height="100" rx="20" fill="black" />
+    <rect
+      width="96"
+      height="96"
+      x="2"
+      y="2"
+      rx="18"
+      stroke="hsl(var(--primary))"
+      strokeWidth="4"
+      fill="none"
+      style={{ filter: 'url(#glow)' }}
+    />
     <text
       x="50%"
       y="50%"
@@ -49,7 +68,7 @@ const AgLogo = ({ size }: { size: number }) => (
       fontFamily="Space Grotesk, sans-serif"
       fontSize="60"
       fontWeight="bold"
-      className="fill-primary-foreground"
+      fill="hsl(var(--primary))"
     >
       AG
     </text>
