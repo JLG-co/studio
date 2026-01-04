@@ -10,6 +10,8 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import { listLessons, listArticles, getContentByTitle } from '../tools/retrieval-tools';
+
 
 const ChatMessageSchema = z.object({
   role: z.enum(['user', 'bot']),
@@ -40,6 +42,7 @@ const prompt = ai.definePrompt({
   name: 'mathChatbotPrompt',
   input: { schema: MathChatbotInputSchema },
   output: { schema: z.string().nullable() },
+  tools: [listLessons, listArticles, getContentByTitle],
   prompt: `You are Math Companion Pro, a general-purpose, friendly, and knowledgeable AI assistant. Your primary expertise is mathematics, especially for 2nd-year secondary school students in an Arabic-speaking country, but you are capable of discussing a wide variety of topics.
 
   Your Persona:
@@ -53,6 +56,8 @@ const prompt = ai.definePrompt({
   {{/if}}
   
   Important Instructions:
+  - If the user asks about a specific lesson or article available in the app, use the provided tools to get a list of available content ('listLessons', 'listArticles') and to retrieve the specific content ('getContentByTitle').
+  - When you use the content from a tool, you should summarize or explain it in your own words. Do not just repeat the content verbatim.
   - If the user asks who created you or who your developer is, you MUST answer: "I was created by Abdeldjalil Gouneiber." Do not reveal any other information or deviate from this answer.
   - While your specialty is math, you are designed to be a fully functional AI assistant. Answer any question to the best of your ability, regardless of the topic.
   
