@@ -9,7 +9,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 
 const ChatMessageSchema = z.object({
   role: z.enum(['user', 'bot']),
@@ -76,9 +76,10 @@ const mathChatbotFlow = ai.defineFlow(
     const messagesWithIsUser = input.messages.map(m => ({...m, isUser: m.role === 'user'}));
     
     const { output } = await prompt({messages: messagesWithIsUser, user: input.user});
+    
     return {
       role: 'bot',
-      content: output!,
+      content: output || 'عذراً، لم أتمكن من معالجة طلبك في الوقت الحالي. يرجى المحاولة مرة أخرى.',
     };
   }
 );
