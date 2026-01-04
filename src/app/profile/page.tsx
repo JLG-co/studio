@@ -4,7 +4,7 @@ import { useState } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn, LogOut, UserPlus, BarChart } from 'lucide-react';
+import { LogIn, LogOut, UserPlus, BarChart, Lock } from 'lucide-react';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { signInWithEmail, signUpWithEmail, signOutUser } from '@/firebase/auth/auth-service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -182,6 +182,10 @@ const AuthForm = () => {
                         </Form>
                     </TabsContent>
                 </Tabs>
+                 <div className="mt-6 flex items-center justify-center text-xs text-muted-foreground">
+                    <Lock className="w-3 h-3 ml-2" />
+                    <span>بياناتك مؤمنة ومشفرة. خصوصيتك هي أولويتنا.</span>
+                </div>
             </CardContent>
         </Card>
     );
