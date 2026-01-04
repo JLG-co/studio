@@ -6,7 +6,7 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from '@/component
 import { SendHorizonal, Loader2, Bot, User } from 'lucide-react';
 import { askMathChatbot, type ChatMessage } from '@/ai/flows/math-chatbot';
 import { cn } from '@/lib/utils';
-import Textarea from 'react-textarea-autosize';
+import { Textarea } from '@/components/ui/textarea';
 import { useUser } from '@/firebase';
 
 const MathChatbot = () => {
@@ -99,9 +99,8 @@ const MathChatbot = () => {
                 }
               }}
               placeholder="اكتب سؤالك هنا..."
-              className="flex-1 resize-none bg-background/50 text-lg p-3"
-              minRows={1}
-              maxRows={5}
+              className="flex-1 resize-none bg-background/50 text-lg p-3 min-h-[48px]"
+              rows={1}
             />
             <Button type="submit" disabled={isLoading || !input.trim()} size="icon" className="h-12 w-12 flex-shrink-0">
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <SendHorizonal className="w-5 h-5" />}
