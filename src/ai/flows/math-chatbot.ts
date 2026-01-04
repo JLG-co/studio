@@ -83,10 +83,17 @@ const mathChatbotFlow = ai.defineFlow(
     const { output } = await prompt({messages: messagesWithIsUser, user: input.user});
     
     let content: string;
+    
     if (typeof output === 'string') {
       content = output;
-    } else if (output && typeof output === 'object' && 'type' in output && typeof (output as any).type === 'string') {
-      content = (output as any).type;
+    } else if (output && typeof output === 'object' && !Array.isArray(output)) {
+      // Handle the case where the model incorrectly returns an object like { type: "response" } or { content: "response" }
+      const potentialContent = (output as any).content || (output as any).type || Object.values(output)[0];
+      if (typeof potentialContent === 'string') {
+        content = potentialContent;
+      } else {
+        content = 'عذراً، لم أتمكن من معالجة طلبك في الوقت الحالي. يرجى المحاولة مرة أخرى.';
+      }
     } else {
       content = 'عذراً، لم أتمكن من معالجة طلبك في الوقت الحالي. يرجى المحاولة مرة أخرى.';
     }
