@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Award, BrainCircuit, GitFork, ShieldCheck } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 const glassCardClasses =
   'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
@@ -18,7 +17,7 @@ const achievements = [
         description: "اكتشاف ونشر ثغرات أمنية في أنظمة معروفة.",
     },
     {
-        icon: <GitFork className="w-8 h-8 text-primary" />,
+        icon: <GitFork className="w-8- h-8 text-primary" />,
         title: "مساهم في المصادر المفتوحة",
         description: "المساهمة في تطوير مشاريع مفتوحة المصدر يعتمد عليها الآلاف.",
     },
@@ -36,18 +35,6 @@ const achievements = [
 
 
 const AboutPage = () => {
-  const [profileImageUrl, setProfileImageUrl] = useState(
-    'https://picsum.photos/seed/jlg/250/250'
-  );
-
-  useEffect(() => {
-    // This is a workaround to use the uploaded image.
-    // In a real application, this would be hosted properly.
-    const uploadedImageUrl =
-      'https://storage.googleapis.com/maker-studio-5f33a.appspot.com/users/user-lK2DvxQd2q2v62i3Y3dJ/studios/studio-1lF6t7l1v7j8n8s9k9h9/1723145610813-jlg.jpeg?alt=media';
-    setProfileImageUrl(uploadedImageUrl);
-  }, []);
-
   return (
     <div className="space-y-12">
       <div>
@@ -60,7 +47,7 @@ const AboutPage = () => {
             <div className="md:col-span-1 flex justify-center">
               <div className="relative w-[250px] h-[250px]">
                 <Image
-                  src={profileImageUrl}
+                  src="https://picsum.photos/seed/jlg/250/250"
                   alt="Abdeldjalil Gouneiber"
                   data-ai-hint="portrait man"
                   fill

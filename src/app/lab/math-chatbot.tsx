@@ -135,7 +135,7 @@ const MathChatbot = () => {
                     <p className="text-lg font-bold">يجب عليك تسجيل الدخول</p>
                     <p>الرجاء تسجيل الدخول لحفظ محادثاتك والبدء في استخدام الشات.</p>
                 </div>
-            ) : messagesLoading && !messages ? (
+            ) : messagesLoading && !messages && chatId ? (
                  <div className="h-full flex flex-col justify-center items-center text-center text-slate-400">
                     <Loader2 size={48} className="animate-spin mb-4" />
                     <p className="text-lg">جاري تحميل المحادثات...</p>
