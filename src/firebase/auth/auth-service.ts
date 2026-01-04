@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -30,12 +30,13 @@ export const signUpWithEmail = async (email: string, password: string, displayNa
   // Create a user document in Firestore
   const userDocRef = doc(firestore, 'users', user.uid);
   const profileData = {
+    id: user.uid,
     displayName: displayName,
     email: user.email,
-    photoURL: user.photoURL
+    createdAt: serverTimestamp(),
   };
 
-  setDoc(userDocRef, profileData, { merge: true })
+  setDoc(userDocRef, profileData)
     .catch(async (serverError) => {
         const permissionError = new FirestorePermissionError({
             path: userDocRef.path,

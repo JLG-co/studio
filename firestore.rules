@@ -16,7 +16,7 @@
  *
  * Data Structure:
  * The data is organized into three top-level collections: `/users`, `/lessons`, and
- * `/articles`. User-specific progress information is nested in a subcollection
+ * `/articles`. User-specific progress information is nested in subcollection
  * as `/users/{userId}/progress/{progressId}`, which leverages path-based security
  * to ensure privacy and ownership.
  *
@@ -114,8 +114,8 @@ service cloud.firestore {
     match /users/{userId} {
       allow get: if isOwner(userId);
       allow list: if false; // Disallow listing users for privacy.
-      allow create: if isOwner(userId) && hasConsistentUserId(userId);
-      allow update: if isExistingOwner(userId) && hasConsistentUserId(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
       allow delete: if isExistingOwner(userId);
 
       /**
@@ -131,6 +131,20 @@ service cloud.firestore {
         allow create: if isOwner(userId) && hasConsistentParentUserId(userId);
         allow update: if isExistingOwner(userId) && hasConsistentParentUserId(userId);
         allow delete: if isExistingOwner(userId);
+      }
+      
+      /**
+       * @description Tracks a user's results on exercises.
+       * @path /users/{userId}/exerciseResults/{resultId}
+       * @allow (create, list) An authenticated user can create and list their own exercise results.
+       * @principle Enforces strict ownership for user-specific data.
+       */
+      match /exerciseResults/{resultId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && hasConsistentParentUserId(userId);
+        allow update: if false; // Results are immutable
+        allow delete: if false; // Results are immutable
       }
     }
 

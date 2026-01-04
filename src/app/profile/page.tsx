@@ -197,7 +197,7 @@ const ProfilePage = () => {
     return query(collection(firestore, `users/${user.uid}/exerciseResults`), orderBy('completedAt', 'desc'));
   }, [user, firestore]);
 
-  const { data: results, loading: resultsLoading } = useCollection(resultsQuery);
+  const { data: results, isLoading: resultsLoading } = useCollection(resultsQuery);
 
   const loading = userLoading || (user && resultsLoading);
 
