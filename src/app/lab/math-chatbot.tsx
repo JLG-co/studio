@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { SendHorizonal, Loader2, Bot, User } from 'lucide-react';
+import { SendHorizonal, Loader2, Bot, User, ShieldAlert } from 'lucide-react';
 import { askMathChatbot, type ChatMessage } from '@/ai/flows/math-chatbot';
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,6 +11,7 @@ import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebas
 import { collection, addDoc, serverTimestamp, query, orderBy, limit, doc } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 const MathChatbot = () => {
@@ -69,12 +70,23 @@ const MathChatbot = () => {
     let currentChatId = chatId;
     // Create a new chat session if one doesn't exist
     if (!currentChatId) {
+      try {
         const chatRef = await addDoc(collection(firestore, `users/${user.uid}/chats`), {
             startedAt: serverTimestamp(),
             topic: input.substring(0, 30),
+            userId: user.uid,
         });
         currentChatId = chatRef.id;
         setChatId(currentChatId);
+      } catch (e) {
+          const permissionError = new FirestorePermissionError({
+              path: `users/${user.uid}/chats`,
+              operation: 'create',
+              requestResourceData: { topic: input.substring(0, 30), userId: user.uid },
+          });
+          errorEmitter.emit('permission-error', permissionError);
+          return;
+      }
     }
     
     const userMessage: ChatMessage = { role: 'user', content: input };
@@ -91,9 +103,13 @@ const MathChatbot = () => {
         user: user ? { displayName: user.displayName || 'User' } : undefined,
       });
       saveMessage(botResponse);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      const errorMessage: ChatMessage = { role: 'bot', content: 'عذراً، حدث خطأ أثناء التواصل مع رفيقك الذكي. يرجى المحاولة مرة أخرى.' };
+      let content = 'عذراً، حدث خطأ أثناء التواصل مع رفيقك الذكي. يرجى المحاولة مرة أخرى.';
+      if (error.message?.includes('429 Too Many Requests')) {
+          content = 'لقد قمت بإرسال الكثير من الطلبات! يرجى الانتظار دقيقة قبل المحاولة مرة أخرى.';
+      }
+      const errorMessage: ChatMessage = { role: 'bot', content };
       saveMessage(errorMessage);
     } finally {
       setIsLoading(false);
@@ -115,8 +131,9 @@ const MathChatbot = () => {
           <div className="flex-1 overflow-y-auto pr-4 space-y-6">
             {!user ? (
                  <div className="h-full flex flex-col justify-center items-center text-center text-slate-400">
-                    <Bot size={48} className="mb-4" />
-                    <p className="text-lg">يجب عليك تسجيل الدخول لحفظ محادثاتك.</p>
+                    <ShieldAlert size={48} className="mb-4 text-yellow-500" />
+                    <p className="text-lg font-bold">يجب عليك تسجيل الدخول</p>
+                    <p>الرجاء تسجيل الدخول لحفظ محادثاتك والبدء في استخدام الشات.</p>
                 </div>
             ) : messagesLoading && !messages ? (
                  <div className="h-full flex flex-col justify-center items-center text-center text-slate-400">
