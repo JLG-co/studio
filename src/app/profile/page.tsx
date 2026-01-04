@@ -75,7 +75,7 @@ const AuthForm = () => {
             if (error.code === 'auth/email-already-in-use') {
                  setAuthError("هذا البريد الإلكتروني مستخدم بالفعل.");
             } else {
-                 setAuthError("فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.");
+                 setAuthError(error.message || "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.");
             }
             console.error(error);
         } finally {
@@ -289,3 +289,5 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+
+    
