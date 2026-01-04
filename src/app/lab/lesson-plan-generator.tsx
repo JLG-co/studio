@@ -7,6 +7,7 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from '@/component
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Wand2, Loader2, BookCopy } from 'lucide-react';
 import { generateLessonPlan, GenerateLessonPlanOutput } from '@/ai/flows/generate-lesson-plan';
+import { marked } from 'marked';
 
 const LessonPlanGenerator = () => {
   const [concept, setConcept] = useState('');
@@ -76,7 +77,7 @@ const LessonPlanGenerator = () => {
               <h3 className="font-headline text-2xl text-primary flex items-center gap-2 mb-4"><BookCopy /> خطة الدرس المقترحة لـ "{concept}"</h3>
               <div 
                 className="prose prose-invert max-w-none text-slate-300 bg-gray-900/50 p-6 rounded-lg"
-                dangerouslySetInnerHTML={{ __html: result.lessonPlan.replace(/\n/g, '<br />') }}
+                dangerouslySetInnerHTML={{ __html: marked(result.lessonPlan) as string }}
               />
           </div>
         )}
