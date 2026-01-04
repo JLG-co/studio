@@ -3,24 +3,35 @@
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Menu, User, ScrollText } from 'lucide-react';
+import { Menu, User, ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import Image from 'next/image';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
-const navLinks = [
+const mainNavLinks = [
   { href: '/', label: 'الرئيسية' },
   { href: '/lessons', label: 'الدروس' },
   { href: '/exercises', label: 'التمارين' },
   { href: '/olympiad', label: 'الأولمبياد' },
-  { href: '/leaderboard', label: 'المتصدرون' },
   { href: '/lab', label: 'المختبر' },
-  { href: '/articles', label: 'المقالات' },
+];
+
+const dropdownLinks = [
+  { href: '/leaderboard', label: 'المتصدرون' },
   { href: '/adaptive-learning', label: 'التعلم التكيفي' },
+  { href: '/articles', label: 'المقالات' },
   { href: '/changelog', label: 'التحديثات' },
   { href: '/about', label: 'عن المطور' },
-];
+]
+
+const allLinks = [...mainNavLinks, ...dropdownLinks];
 
 const Header = () => {
   const pathname = usePathname();
@@ -41,6 +52,23 @@ const Header = () => {
       </Link>
     );
   };
+  
+  const DropdownNavLink = ({ href, label }: { href: string; label: string }) => {
+    const isActive = pathname.startsWith(href) && (href !== '/' || pathname === '/');
+    return (
+      <DropdownMenuItem asChild>
+        <Link
+          href={href}
+          className={cn(
+            'text-lg font-medium transition-colors hover:text-primary focus:bg-background/50',
+            isActive ? 'text-primary' : 'text-slate-300'
+          )}
+        >
+          {label}
+        </Link>
+      </DropdownMenuItem>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -59,9 +87,22 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6">
-            {navLinks.map((link) => (
+            {mainNavLinks.map((link) => (
               <NavLink key={link.href} {...link} />
             ))}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-lg font-medium text-slate-300 hover:text-primary data-[state=open]:text-primary">
+                  المزيد
+                  <ChevronDown className="w-5 h-5 mr-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-background/80 backdrop-blur-xl border-cyan-300/10">
+                {dropdownLinks.map((link) => (
+                  <DropdownNavLink key={link.href} {...link} />
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
           
           <div className="flex items-center gap-2">
@@ -82,7 +123,7 @@ const Header = () => {
                 </SheetTrigger>
                 <SheetContent side="right" className="bg-background/80 backdrop-blur-xl border-cyan-300/10">
                   <nav className="flex flex-col items-center justify-center h-full gap-8">
-                    {navLinks.map((link) => (
+                    {allLinks.map((link) => (
                       <NavLink key={link.href} {...link} />
                     ))}
                   </nav>
