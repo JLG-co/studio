@@ -6,8 +6,10 @@ const symbols = ['+', '−', '×', '÷', '√', '∫', '∑', '∞', 'π', 'Δ',
 
 const KineticBackground = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({ x: event.clientX, y: event.clientY });
     };
@@ -20,6 +22,8 @@ const KineticBackground = () => {
   }, []);
   
   const floatingSymbols = useMemo(() => {
+    // Only generate symbols on the client
+    if (!isClient) return [];
     return Array.from({ length: 20 }).map((_, i) => {
       const size = Math.random() * 2 + 1; // 1rem to 3rem
       const initialX = Math.random() * 100;
@@ -40,13 +44,7 @@ const KineticBackground = () => {
         symbol,
       };
     });
-  }, []);
-
-  const [isClient, setIsClient] = useState(false)
- 
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
+  }, [isClient]);
 
   if (!isClient) {
     return null;
