@@ -53,3 +53,11 @@ export interface ExerciseResult {
     percentage: number;
     completedAt: Timestamp;
 }
+
+export interface LeaderboardUser {
+  id: string;
+  rank: number;
+  name: string;
+  score: number;
+  avatarUrl: string;
+}

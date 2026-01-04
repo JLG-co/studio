@@ -1,5 +1,5 @@
 
-import type { Lesson, Article, ExerciseSet, OlympiadQuestion } from './types';
+import type { Lesson, Article, ExerciseSet, OlympiadQuestion, LeaderboardUser } from './types';
 
 const commonStyles = `
   <style>
@@ -712,13 +712,13 @@ export const olympiadQuestions: OlympiadQuestion[] = [
       <p><b>الحالة 1: n عدد زوجي.</b></p>
       <p>في هذه الحالة، <code>n * 2^n + 1 ≡ n * 1 + 1 ≡ n + 1 (mod 3)</code>.</p>
       <p>نريد أن يكون <code>n + 1 ≡ 0 (mod 3)</code>، مما يعني <code>n ≡ -1 ≡ 2 (mod 3)</code>.</p>
-      <p>إذن، في هذه الحالة، يجب أن يكون <code>n</code> عددًا زوجيًا وباقي قسمته على 3 هو 2.</p>
+      <p>إذًا، في هذه الحالة، يجب أن يكون <code>n</code> عددًا زوجيًا وباقي قسمته على 3 هو 2.</p>
       
       <p><b>الحالة 2: n عدد فردي.</b></p>
       <p>في هذه الحالة، <code>n * 2^n + 1 ≡ n * 2 + 1 ≡ 2n + 1 (mod 3)</code>.</p>
       <p>نريد أن يكون <code>2n + 1 ≡ 0 (mod 3)</code>، مما يعني <code>2n ≡ -1 ≡ 2 (mod 3)</code>.</p>
       <p>بضرب الطرفين في 2 (وهو المعكوس الضربي لـ 2 في Z₃)، نحصل على <code>4n ≡ 4 (mod 3)</code>، وهو ما يكافئ <code>n ≡ 1 (mod 3)</code>.</p>
-      <p>إذن، في هذه الحالة، يجب أن يكون <code>n</code> عددًا فرديًا وباقي قسمته على 3 هو 1.</p>
+      <p>إذًا، في هذه الحالة، يجب أن يكون <code>n</code> عددًا فرديًا وباقي قسمته على 3 هو 1.</p>
       
       <p><b>الخلاصة:</b></p>
       <p>الشرط يتحقق لجميع الأعداد الصحيحة الموجبة <code>n</code> التي هي إما:</p>
@@ -781,4 +781,24 @@ export const olympiadQuestions: OlympiadQuestion[] = [
       </div>
     `,
   },
+];
+
+
+export const leaderboardUsers: LeaderboardUser[] = [
+  { id: 'user1', rank: 1, name: 'أمينة', score: 9850, avatarUrl: 'https://picsum.photos/seed/user1/100/100' },
+  { id: 'user2', rank: 2, name: 'يوسف', score: 9720, avatarUrl: 'https://picsum.photos/seed/user2/100/100' },
+  { id: 'user3', rank: 3, name: 'فاطمة', score: 9680, avatarUrl: 'https://picsum.photos/seed/user3/100/100' },
+  { id: 'user4', rank: 4, name: 'علي', score: 9550, avatarUrl: 'https://picsum.photos/seed/user4/100/100' },
+  { id: 'user5', rank: 5, name: 'خديجة', score: 9400, avatarUrl: 'https://picsum.photos/seed/user5/100/100' },
+  { id: 'user6', rank: 6, name: 'محمد', score: 9210, avatarUrl: 'https://picsum.photos/seed/user6/100/100' },
+  { id: 'user7', rank: 7, name: 'عائشة', score: 9050, avatarUrl: 'https://picsum.photos/seed/user7/100/100' },
+  { id: 'user8', rank: 8, name: 'أحمد', score: 8900, avatarUrl: 'https://picsum.photos/seed/user8/100/100' },
+  { id: 'user9', rank: 9, name: 'مريم', score: 8750, avatarUrl: 'https://picsum.photos/seed/user9/100/100' },
+  { id: 'user10', rank: 10, name: 'إبراهيم', score: 8600, avatarUrl: 'https://picsum.photos/seed/user10/100/100' },
+  { id: 'user11', rank: 11, name: 'سارة', score: 8450, avatarUrl: 'https://picsum.photos/seed/user11/100/100' },
+  { id: 'user12', rank: 12, name: 'خالد', score: 8300, avatarUrl: 'https://picsum.photos/seed/user12/100/100' },
+  { id: 'user13', rank: 13, name: 'هند', score: 8150, avatarUrl: 'https://picsum.photos/seed/user13/100/100' },
+  { id: 'user14', rank: 14, name: 'عمر', score: 8000, avatarUrl: 'https://picsum.photos/seed/user14/100/100' },
+  { id: 'user15', rank: 15, name: 'ليلى', score: 7850, avatarUrl: 'https://picsum.photos/seed/user15/100/100' },
+  { id: 'user16', rank: 16, name: 'زينب', score: 7700, avatarUrl: 'https://picsum.photos/seed/user16/100/100' },
 ];
