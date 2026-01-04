@@ -156,7 +156,7 @@ service cloud.firestore {
       match /chats/{chatId} {
         allow get: if isOwner(userId);
         allow list: if isOwner(userId);
-        allow create: if isOwner(userId);
+        allow create: if isOwner(userId) && hasConsistentParentUserId(userId);
         allow update, delete: if false; // Chat sessions are immutable
 
         /**
@@ -167,7 +167,7 @@ service cloud.firestore {
          */
         match /messages/{messageId} {
           allow list: if isOwner(userId);
-          allow create: if isOwner(userId);
+          allow create: if isOwner(userId) && request.resource.data.role == 'user' || request.resource.data.role == 'bot';
           allow get, update, delete: if false; // Messages are immutable
         }
       }
