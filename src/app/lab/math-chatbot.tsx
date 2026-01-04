@@ -35,7 +35,10 @@ const MathChatbot = () => {
     setIsLoading(true);
 
     try {
-      const botResponse = await askMathChatbot({ messages: newMessages });
+      const botResponse = await askMathChatbot({
+        messages: newMessages,
+        user: user ? { displayName: user.displayName || 'User' } : undefined,
+      });
       setMessages([...newMessages, botResponse]);
     } catch (error) {
       console.error(error);
@@ -53,7 +56,7 @@ const MathChatbot = () => {
           <Bot className="w-7 h-7 text-primary"/>
           رفيقك الذكي في الرياضيات
         </CardTitle>
-        <CardDescription>اطرح أي سؤال يتعلق بالرياضيات واحصل على إجابة فورية. {user ? `مرحباً بك ${user.displayName}!` : ''}</CardDescription>
+        <CardDescription>اطرح أي سؤال يتعلق بالرياضيات واحصل على إجابة فورية. {user ? `مرحباً بك يا ${user.displayName}!` : ''}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[500px] flex flex-col">

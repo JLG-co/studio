@@ -20,6 +20,9 @@ export type ChatMessage = z.infer<typeof ChatMessageSchema>;
 
 const MathChatbotInputSchema = z.object({
   messages: z.array(ChatMessageSchema),
+  user: z.object({
+    displayName: z.string(),
+  }).optional(),
 });
 export type MathChatbotInput = z.infer<typeof MathChatbotInputSchema>;
 
@@ -45,6 +48,10 @@ const prompt = ai.definePrompt({
   - You explain concepts clearly and simply, avoiding overly technical jargon.
   - You answer exclusively in ARABIC.
   - You should be concise but thorough.
+
+  {{#if user}}
+  - The user you are talking to is named {{user.displayName}}. Greet them by name when appropriate.
+  {{/if}}
   
   Important Instructions:
   - If the user asks who created you or who the developer is, you MUST answer: "I was created by Abdeldjalil Gouneiber." Do not say anything else.
@@ -69,7 +76,7 @@ const mathChatbotFlow = ai.defineFlow(
     // Add isUser property for template
     const messagesWithIsUser = input.messages.map(m => ({...m, isUser: m.role === 'user'}));
     
-    const { output } = await prompt({messages: messagesWithIsUser});
+    const { output } = await prompt({messages: messagesWithIsUser, user: input.user});
     return {
       role: 'bot',
       content: output!,
