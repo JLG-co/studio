@@ -1,10 +1,5 @@
-import dynamic from 'next/dynamic';
+import ExerciseClientPage from './ExerciseClientPage';
 import { exerciseSets } from '@/lib/data';
-
-// Dynamically import the client component and disable SSR
-const ExerciseClientPage = dynamic(() => import('./ExerciseClientPage'), {
-  ssr: false,
-});
 
 type ExercisePageProps = {
   params: {
@@ -19,6 +14,8 @@ export async function generateStaticParams() {
 }
 
 const ExercisePage = ({ params }: ExercisePageProps) => {
+  // The ExerciseClientPage is already marked with 'use client',
+  // so Next.js knows to treat it as a client boundary.
   return <ExerciseClientPage />;
 };
 
