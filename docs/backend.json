@@ -71,7 +71,7 @@
         },
         "updatedAt": {
           "type": "string",
-          "description": "Timestamp indicating when the article was last updated.",
+          "description": "Timestamp indicating when the lesson was last updated.",
           "format": "date-time"
         }
       },
@@ -139,7 +139,7 @@
           "description": "Email address of the user.",
           "format": "email"
         },
-        "name": {
+        "displayName": {
           "type": "string",
           "description": "Full name of the user."
         },
@@ -148,9 +148,9 @@
           "description": "The user's total score for the leaderboard."
         },
         "avatarUrl": {
-            "type": "string",
-            "description": "URL for the user's avatar image.",
-            "format": "uri"
+          "type": "string",
+          "description": "URL for the user's avatar image.",
+          "format": "uri"
         },
         "createdAt": {
           "type": "string",
@@ -166,7 +166,7 @@
       "required": [
         "id",
         "email",
-        "name",
+        "displayName",
         "score",
         "createdAt"
       ]
@@ -336,5 +336,3 @@
     "reasoning": "The Firestore data structure is designed to support the 'Math Companion Pro' application, focusing on lessons, scientific articles, user progress tracking, and user management. The structure prioritizes Authorization Independence via denormalization to ensure security rules are simple and robust. It also uses Structural Segregation to maintain a homogeneous security posture within each collection.  The design leverages path-based ownership for user-specific data and incorporates the membership map pattern where collaboration is needed.\n\n*   **/users/{userId}**: Stores user profiles. This collection utilizes path-based ownership, providing a clear and secure way to manage individual user data.  Each user document is uniquely identified by the `userId`.  Security rules will be implemented to ensure only the user can access their own document.\n*   **/lessons/{lessonId}**: Contains math lessons.  Lessons are globally accessible, implying read access for all users. Create, Update, and Delete (CUD) operations are restricted to authorized admins (not defined, but assumed for content management).\n*   **/articles/{articleId}**: Stores scientific articles related to math applications. Similar to lessons, articles are globally readable, with CUD operations restricted to admins.\n*   **/users/{userId}/progress/{progressId}**: Tracks user progress on lessons and articles. By nesting this data under `/users/{userId}`, we enforce ownership, ensuring a user can only access their own progress data. This structure enables efficient querying of a user's progress and maintains a clear parent-child relationship for security rules.\n\nThis structure achieves Authorization Independence by avoiding hierarchical authorization dependencies (no `get()` calls in rules).  User-specific data is segregated under the `/users/{userId}` path, ensuring that access control is based solely on the `request.auth.uid`. The structure supports the required QAPs by:\n\n*   Enabling secure `list` operations: Each collection has a clear security posture. Listing users is restricted. Lessons and articles could be listed with proper authorization checks (e.g., for admin users). User progress can be listed only within a specific user's scope.\n*   Enforcing invariants: Ownership of user progress is strictly maintained via path-based ownership."
   }
 }
-
-    

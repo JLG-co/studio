@@ -39,7 +39,7 @@ const getRankIcon = (rank: number) => {
 };
 
 const LeaderboardPage = () => {
-    const { user, loading: userLoading } = useUser();
+    const { user, isUserLoading: userLoading } = useUser();
     const firestore = useFirestore();
 
     const leaderboardQuery = useMemoFirebase(() => {
