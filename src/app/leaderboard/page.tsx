@@ -23,6 +23,9 @@ import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { User as AppUser } from '@/lib/types';
+import { useCollection as useFirestoreCollection } from '@/firebase/firestore/use-collection';
+
 
 const glassCardClasses =
   'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
@@ -51,7 +54,7 @@ const LeaderboardPage = () => {
         );
     }, [firestore]);
 
-    const { data: users, isLoading: usersLoading } = useCollection(leaderboardQuery);
+    const { data: users, isLoading: usersLoading } = useFirestoreCollection<AppUser>(leaderboardQuery);
 
     const loading = userLoading || usersLoading;
 
@@ -153,7 +156,11 @@ const LeaderboardPage = () => {
                   <TableCell><Skeleton className='h-6 w-16' /></TableCell>
                 </TableRow>
               ))}
-              {!loading && users && users.map((u: any, index) => (
+              {!loading && users && users.map((u, index) => {
+                const totalPossiblePoints = (users.length - index) * 10;
+                const average = totalPossiblePoints > 0 ? (u.score / totalPossiblePoints) * 100 : 0;
+
+                return (
                 <TableRow
                   key={u.id}
                   className={`border-cyan-300/10 ${
@@ -182,11 +189,11 @@ const LeaderboardPage = () => {
                   <TableCell className="text-right font-bold text-lg text-primary">
                     {u.score?.toLocaleString() || 0}
                   </TableCell>
-                  <TableCell className="text-right font-bold text-lg text-cyan-400">
-                    {u.score ? `${(u.score / ((users.length - index)*10)).toFixed(2)}%` : `0.00%`}
+                   <TableCell className="text-right font-bold text-lg text-cyan-400">
+                    {average.toFixed(2)}%
                   </TableCell>
                 </TableRow>
-              ))}
+              )})}
             </TableBody>
           </Table>
         </CardContent>

@@ -1,5 +1,15 @@
 import { Timestamp } from "firebase/firestore";
 
+export interface User {
+  id: string;
+  displayName: string;
+  email: string;
+  score: number;
+  avatarUrl?: string;
+  createdAt: Timestamp;
+  lastLogin: Timestamp;
+}
+
 export interface Lesson {
   slug: string;
   title: string;
