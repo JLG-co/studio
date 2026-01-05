@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn, LogOut, UserPlus, BarChart, Lock, Mail, Trash2 } from 'lucide-react';
+import { LogIn, LogOut, UserPlus, BarChart, Lock, Mail, Trash2, Upload } from 'lucide-react';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { signInWithEmail, signUpWithEmail, signOutUser, sendPasswordReset, signInWithGoogle, signInWithApple, resendVerificationEmail, deleteCurrentUserAccount } from '@/firebase/auth/auth-service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { collection, query, orderBy } from 'firebase/firestore';
+import { collection, query, orderBy, doc, updateDoc } from 'firebase/firestore';
 import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
@@ -360,6 +360,8 @@ const ProfilePage = () => {
   const { toast } = useToast();
   const [resendLoading, setResendLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const resultsQuery = useMemoFirebase(() => {
     if (!user || !firestore) return null;
@@ -369,6 +371,56 @@ const ProfilePage = () => {
   const { data: results, isLoading: resultsLoading } = useCollection(resultsQuery);
 
   const loading = userLoading || (user && resultsLoading);
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || !user || !firestore) return;
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploadLoading(true);
+    
+    try {
+        const idToken = await user.getIdToken();
+        const response = await fetch(`/api/avatar/upload?filename=${file.name}`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${idToken}`,
+            },
+            body: file,
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to upload file.');
+        }
+
+        const newBlob = await response.json();
+
+        // Update user's avatarUrl in Firestore
+        const userDocRef = doc(firestore, 'users', user.uid);
+        await updateDoc(userDocRef, {
+            avatarUrl: newBlob.url,
+        });
+
+        toast({
+            title: 'تم تحديث الصورة الرمزية',
+            description: 'تم تغيير صورتك الشخصية بنجاح.',
+        });
+    } catch (error) {
+        console.error('Upload error:', error);
+        toast({
+            variant: 'destructive',
+            title: 'فشل الرفع',
+            description: (error as Error).message || 'حدث خطأ أثناء رفع الصورة. يرجى المحاولة مرة أخرى.',
+        });
+    } finally {
+        setUploadLoading(false);
+    }
+  };
 
   const handleResendVerification = async () => {
     setResendLoading(true);
@@ -454,12 +506,31 @@ const ProfilePage = () => {
         <CardHeader>
             <div className="flex flex-wrap items-center gap-4 justify-between">
                 <div className="flex items-center gap-4">
-                    <Avatar className="w-16 h-16 border-2 border-primary">
-                        <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
-                        <AvatarFallback>
-                            {user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}
-                        </AvatarFallback>
-                    </Avatar>
+                    <div className="relative group">
+                        <Avatar className="w-20 h-20 border-2 border-primary">
+                            <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                            <AvatarFallback>
+                                {user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}
+                            </AvatarFallback>
+                        </Avatar>
+                        <button 
+                            onClick={handleAvatarClick} 
+                            disabled={uploadLoading}
+                            className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            {uploadLoading ? 
+                                <Skeleton className="h-10 w-10 rounded-full" /> : 
+                                <Upload className="w-8 h-8 text-white" />
+                            }
+                        </button>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            className="hidden"
+                            accept="image/png, image/jpeg"
+                        />
+                    </div>
                     <div>
                         <CardTitle className="font-headline text-4xl">{user.displayName || 'مستخدم جديد'}</CardTitle>
                         <CardDescription>{user.email}</CardDescription>
