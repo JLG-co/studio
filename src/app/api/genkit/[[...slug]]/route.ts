@@ -1,4 +1,3 @@
-'use server';
 import {nextHandler} from '@genkit-ai/next';
 
 export const runtime = 'nodejs';
