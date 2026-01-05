@@ -67,7 +67,7 @@ export const lessons: Lesson[] = [
     slug: 'derivatives',
     title: 'الاشتقاق',
     description: 'مقدمة في حساب التفاضل، فهم المعدلات اللحظية للتغير، وقواعد الاشتقاق الأساسية.',
-    imageUrl: 'https://picsum.photos/seed/calculus/1200/400',
+    imageUrl: 'https://picsum.photos/seed/101/1200/400',
     imageHint: 'calculus graph',
     content: `
       ${commonStyles}
@@ -100,8 +100,8 @@ export const lessons: Lesson[] = [
     slug: 'limits',
     title: 'النهايات',
     description: 'استكشاف مفهوم النهايات، وكيفية حسابها، وتطبيقاتها في الاستمرارية والاشتقاق.',
-    imageUrl: 'https://picsum.photos/seed/math-abstract/1200/400',
-    imageHint: 'abstract math',
+    imageUrl: 'https://picsum.photos/seed/102/1200/400',
+    imageHint: 'infinity symbol',
     content: `
       ${commonStyles}
       <h3>مفهوم النهاية</h3>
@@ -128,7 +128,7 @@ export const lessons: Lesson[] = [
     slug: 'polynomials',
     title: 'كثيرات الحدود',
     description: 'العمليات على كثيرات الحدود، إيجاد الجذور، ونظرية الباقي.',
-    imageUrl: 'https://picsum.photos/seed/algebra/1200/400',
+    imageUrl: 'https://picsum.photos/seed/103/1200/400',
     imageHint: 'algebra equation',
     content: `
       ${commonStyles}
@@ -156,7 +156,7 @@ export const lessons: Lesson[] = [
     slug: 'probability',
     title: 'الاحتمالات',
     description: 'أساسيات نظرية الاحتمالات، الأحداث، الاحتمال الشرطي، والمتغيرات العشوائية.',
-    imageUrl: 'https://picsum.photos/seed/probability-dice/1200/400',
+    imageUrl: 'https://picsum.photos/seed/104/1200/400',
     imageHint: 'dice probability',
     content: `
        ${commonStyles}
@@ -179,7 +179,7 @@ export const lessons: Lesson[] = [
     slug: 'trigonometry',
     title: 'حساب المثلثات',
     description: 'الدوال المثلثية، دائرة الوحدة، المعادلات والمتطابقات المثلثية.',
-    imageUrl: 'https://picsum.photos/seed/trigonometry-unit-circle/1200/400',
+    imageUrl: 'https://picsum.photos/seed/105/1200/400',
     imageHint: 'trigonometry circle',
     content: `
       ${commonStyles}
@@ -206,8 +206,8 @@ export const lessons: Lesson[] = [
     slug: 'vectors',
     title: 'الأشعة',
     description: 'مقدمة عن الأشعة في المستوى، العمليات على الأشعة، واستقلالها الخطي.',
-    imageUrl: 'https://picsum.photos/seed/vector-arrows/1200/400',
-    imageHint: 'arrows vectors',
+    imageUrl: 'https://picsum.photos/seed/106/1200/400',
+    imageHint: 'vector arrows',
     content: `
       ${commonStyles}
       <h3>ما هي الأشعة؟</h3>
@@ -227,7 +227,7 @@ export const lessons: Lesson[] = [
     slug: 'scalar-product',
     title: 'الجداء السلمي',
     description: 'تعريف الجداء السلمي، خصائصه، وتطبيقاته الهندسية مثل حساب الأطوال والزوايا.',
-    imageUrl: 'https://picsum.photos/seed/geometry-angles/1200/400',
+    imageUrl: 'https://picsum.photos/seed/107/1200/400',
     imageHint: 'geometric angles',
     content: `
       ${commonStyles}
@@ -256,8 +256,8 @@ export const lessons: Lesson[] = [
     slug: 'geometric-transformations',
     title: 'التحويلات الهندسية',
     description: 'فهم التحاكي، الدوران، والانسحاب وتأثيرها على الأشكال الهندسية.',
-    imageUrl: 'https://picsum.photos/seed/geometric-patterns/1200/400',
-    imageHint: 'geometric transformation',
+    imageUrl: 'https://picsum.photos/seed/108/1200/400',
+    imageHint: 'geometric pattern',
     content: `
       ${commonStyles}
       <h3>مقدمة</h3>
@@ -282,7 +282,7 @@ export const lessons: Lesson[] = [
     slug: 'sequences',
     title: 'المتتاليات العددية',
     description: 'دراسة المتتاليات الحسابية والهندسية، حساب الحدود، والمجموع.',
-    imageUrl: 'https://picsum.photos/seed/sequences-numbers/1200/400',
+    imageUrl: 'https://picsum.photos/seed/109/1200/400',
     imageHint: 'number sequence',
     content: `
       ${commonStyles}
@@ -314,7 +314,7 @@ export const lessons: Lesson[] = [
     slug: 'barycenter',
     title: 'المرجح في المستوى',
     description: 'تعريف مرجح نقطتين أو أكثر، خصائصه، وتطبيقاته في إثبات استقامية النقاط وتلاقي المستقيمات.',
-    imageUrl: 'https://picsum.photos/seed/balance-scale/1200/400',
+    imageUrl: 'https://picsum.photos/seed/110/1200/400',
     imageHint: 'balance scale',
     content: `
       ${commonStyles}
@@ -344,8 +344,8 @@ export const lessons: Lesson[] = [
     slug: 'directed-angles',
     title: 'الزوايا الموجهة',
     description: 'فهم الزوايا الموجهة، أقياسها، وعلاقة شال للزوايا.',
-    imageUrl: 'https://picsum.photos/seed/protractor-angle/1200/400',
-    imageHint: 'angle measurement',
+    imageUrl: 'https://picsum.photos/seed/111/1200/400',
+    imageHint: 'protractor angle',
     content: `
       ${commonStyles}
       <h3>ما هي الزاوية الموجهة؟</h3>
@@ -374,8 +374,8 @@ export const lessons: Lesson[] = [
     slug: 'space-geometry',
     title: 'الهندسة في الفضاء',
     description: 'دراسة الأوضاع النسبية للمستقيمات والمستويات، التوازي، والتعامد في الفضاء ثلاثي الأبعاد.',
-    imageUrl: 'https://picsum.photos/seed/3d-geometry/1200/400',
-    imageHint: '3d shapes',
+    imageUrl: 'https://picsum.photos/seed/112/1200/400',
+    imageHint: '3d cubes',
     content: `
       ${commonStyles}
       <h3>تعيين المستقيمات والمستويات</h3>
@@ -414,7 +414,7 @@ export const articles: Article[] = [
     slug: 'math-in-mri',
     title: 'الرياضيات في التصوير بالرنين المغناطيسي (MRI)',
     description: 'كيف تمكّن تحويلات فورييه الأطباء من رؤية ما بداخل الجسم البشري.',
-    imageUrl: 'https://picsum.photos/seed/mri-scan/600/400',
+    imageUrl: 'https://picsum.photos/seed/201/600/400',
     imageHint: 'mri scan',
     content: `
       ${commonStyles}
@@ -436,7 +436,7 @@ export const articles: Article[] = [
     slug: 'math-in-cybersecurity',
     title: 'الرياضيات في أمن المعلومات: تشفير RSA',
     description: 'الأعداد الأولية وكيف تحمي أسرارنا الرقمية عبر الإنترنت.',
-    imageUrl: 'https://picsum.photos/seed/cyber-lock/600/400',
+    imageUrl: 'https://picsum.photos/seed/202/600/400',
     imageHint: 'cyber security',
     content: `
       ${commonStyles}
@@ -470,7 +470,7 @@ export const articles: Article[] = [
     slug: 'math-in-gps',
     title: 'الرياضيات وراء GPS',
     description: 'كيف تساعد نظرية النسبية والهندسة في تحديد موقعك بدقة.',
-    imageUrl: 'https://picsum.photos/seed/gps-satellite/600/400',
+    imageUrl: 'https://picsum.photos/seed/203/600/400',
     imageHint: 'satellite orbit',
     content: `
       ${commonStyles}
@@ -500,7 +500,7 @@ export const articles: Article[] = [
     slug: 'fractal-geometry',
     title: 'جمال الفركتلات: الهندسة اللامتناهية',
     description: 'اكتشف كيف تصف الأنماط المتكررة ذاتيًا كل شيء من السواحل إلى أوراق الشجر.',
-    imageUrl: 'https://picsum.photos/seed/fractal-art/600/400',
+    imageUrl: 'https://picsum.photos/seed/204/600/400',
     imageHint: 'fractal art',
     content: `
       ${commonStyles}
@@ -525,7 +525,7 @@ export const articles: Article[] = [
     slug: 'statistics-in-ml',
     title: 'الإحصاء في تعلم الآلة',
     description: 'كيف تشكل المفاهيم الإحصائية الأساس لتدريب وتقييم نماذج الذكاء الاصطناعي.',
-    imageUrl: 'https://picsum.photos/seed/data-science/600/400',
+    imageUrl: 'https://picsum.photos/seed/205/600/400',
     imageHint: 'data science',
     content: `
       ${commonStyles}
@@ -547,7 +547,7 @@ export const articles: Article[] = [
     slug: 'riemann-hypothesis',
     title: 'فرضية ريمان: لغز الأعداد الأولية',
     description: 'نظرة على واحدة من أعظم المسائل غير المحلولة في الرياضيات وعلاقتها بتوزيع الأعداد الأولية.',
-    imageUrl: 'https://picsum.photos/seed/prime-numbers/600/400',
+    imageUrl: 'https://picsum.photos/seed/206/600/400',
     imageHint: 'prime numbers',
     content: `
       ${commonStyles}
@@ -571,8 +571,8 @@ export const articles: Article[] = [
     slug: 'math-through-the-ages',
     title: 'الرياضيات عبر العصور',
     description: 'رحلة عبر تاريخ الرياضيات، من الحضارات القديمة إلى العصر الحديث.',
-    imageUrl: 'https://picsum.photos/seed/history-math/600/400',
-    imageHint: 'history manuscript',
+    imageUrl: 'https://picsum.photos/seed/207/600/400',
+    imageHint: 'historic manuscript',
     content: `
       ${commonStyles}
       <h3>مقدمة</h3>
