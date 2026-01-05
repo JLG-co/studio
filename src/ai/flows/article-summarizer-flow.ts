@@ -8,7 +8,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit/zod';
+import { z } from 'zod';
 
 export const ArticleSummarizerInputSchema = z.object({
   articleText: z.string().describe('The full text of the scientific article to be summarized.'),

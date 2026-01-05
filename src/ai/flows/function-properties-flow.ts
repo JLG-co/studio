@@ -8,7 +8,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit/zod';
+import { z } from 'zod';
 
 export const FunctionAnalysisInputSchema = z.object({
   functionStr: z.string().describe('The mathematical function to analyze, as a string. e.g., "x^3 - 3*x + 2"'),
