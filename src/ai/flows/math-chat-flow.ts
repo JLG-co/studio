@@ -20,7 +20,7 @@ export async function mathChat(input: MathChatInput): Promise<MathChatOutput> {
 
 const mathChatPrompt = ai.definePrompt({
   name: 'mathChatPrompt',
-  model: 'googleai/gemini-1.5-flash-latest',
+  model: 'gemini-1.5-flash-latest',
   input: { schema: MathChatInputSchema },
   output: { schema: MathChatOutputSchema },
   prompt: `You are Math Companion Pro, an expert AI assistant for high school students specializing in mathematics for the 2nd year of Algerian secondary education. Your tone should be encouraging, clear, and helpful. Always respond in ARABIC and use Markdown for formatting.
