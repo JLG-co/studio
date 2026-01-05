@@ -174,7 +174,7 @@ const LeaderboardPage = () => {
                         </AvatarFallback>
                       </Avatar>
                       <span className="font-medium text-white">{u.displayName}</span>
-                      {u.displayName === 'Abdeldjalil Gouneiber' && (
+                      {u.email === 'amzahr75@gmail.com' && (
                         <CheckCircle className="w-5 h-5 text-blue-400" title="مطور" />
                       )}
                     </div>

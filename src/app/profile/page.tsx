@@ -39,8 +39,11 @@ const loginSchema = z.object({
   password: z.string().min(1, { message: "كلمة المرور مطلوبة" }),
 });
 
+const arabicOnlyRegex = /^[\u0600-\u06FF\s]+$/;
 const signupSchema = z.object({
-  displayName: z.string().min(3, { message: "يجب أن يكون اسم العرض 3 أحرف على الأقل" }),
+  displayName: z.string()
+    .min(3, { message: "يجب أن يكون اسم العرض 3 أحرف على الأقل" })
+    .regex(arabicOnlyRegex, { message: "الرجاء استخدام أحرف عربية فقط للاسم" }),
   email: z.string().email({ message: "البريد الإلكتروني غير صالح" }),
   password: z.string().min(6, { message: "يجب أن تكون كلمة المرور 6 أحرف على الأقل" }),
 });
@@ -123,8 +126,19 @@ const AuthForm = () => {
     };
 
     const onSignupSubmit = async (values: z.infer<typeof signupSchema>) => {
-        setLoading(true);
         setAuthError(null);
+        const restrictedName = "عبدالجليل قنيبر";
+        const allowedEmail = "amzahr75@gmail.com";
+
+        if (values.displayName === restrictedName && values.email.toLowerCase() !== allowedEmail) {
+            signupForm.setError("displayName", {
+                type: "manual",
+                message: "استخدام هذا الاسم مقيد، استخدم اسمك."
+            });
+            return;
+        }
+
+        setLoading(true);
         try {
             await signUpWithEmail(values.email, values.password, values.displayName);
              toast({
@@ -341,7 +355,7 @@ const AuthForm = () => {
 
 
 const ProfilePage = () => {
-  const { user, loading: userLoading } = useUser();
+  const { user, isUserLoading: userLoading } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
   const [resendLoading, setResendLoading] = useState(false);
