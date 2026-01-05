@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveLeft, PencilRuler, Trophy, ScrollText } from 'lucide-react';
+import { BookOpen, FlaskConical, Newspaper, BrainCircuit, MoveLeft, PencilRuler, Trophy, ScrollText, GitBranch } from 'lucide-react';
 import Link from 'next/link';
 
 const features = [
@@ -23,9 +23,15 @@ const features = [
     href: '/olympiad',
   },
   {
+    icon: <BrainCircuit className="w-8 h-8 text-primary" />,
+    title: 'التعلم التكيفي',
+    description: 'مسار تعليمي مخصص يعتمد على أدائك ويقترح عليك الدروس والتمارين المناسبة لك.',
+    href: '/adaptive-learning',
+  },
+  {
     icon: <FlaskConical className="w-8 h-8 text-primary" />,
     title: "مختبر الحساب",
-    description: "أدوات تفاعلية لرسم الدوال، حل المعادلات، وحساب المرجح.",
+    description: "أدوات تفاعلية لرسم الدوال، حل المعادلات، والتحدث مع رفيقك الذكي.",
     href: "/lab",
   },
   {
@@ -55,7 +61,7 @@ export default function Home() {
           رفيقك الأمثل لإتقان الرياضيات
         </p>
         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-          انطلق في رحلة تعلم فريدة مع دروس تفاعلية، وأدوات حسابية قوية، ومقالات علمية تثري معرفتك. مصمم خصيصًا لطلاب السنة الثانية ثانوي.
+          انطلق في رحلة تعلم فريدة مع دروس تفاعلية، وأدوات حسابية قوية، ومسار تعليمي يتكيف مع مستواك. مصمم خصيصًا لطلاب السنة الثانية ثانوي.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild size="lg" className="font-bold text-lg">

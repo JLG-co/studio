@@ -20,6 +20,7 @@ const mainNavLinks = [
   { href: '/exercises', label: 'التمارين' },
   { href: '/olympiad', label: 'الأولمبياد' },
   { href: '/lab', label: 'المختبر' },
+  { href: '/adaptive-learning', label: 'التعلم التكيفي' },
 ];
 
 const dropdownLinks = [
