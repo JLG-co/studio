@@ -11,10 +11,11 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   OAuthProvider,
+  deleteUser,
   User,
 } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
-import { doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, getDoc, deleteDoc } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -149,6 +150,35 @@ export const resendVerificationEmail = async () => {
     } catch (error) {
         console.error('Error sending verification email:', error);
         // Re-throw to be handled by the UI
+        throw error;
+    }
+};
+
+export const deleteCurrentUserAccount = async () => {
+    if (!auth.currentUser || !firestore) {
+        throw new Error('No user is currently signed in or Firestore is not available.');
+    }
+
+    const user = auth.currentUser;
+    const userDocRef = doc(firestore, 'users', user.uid);
+
+    try {
+        // Step 1: Delete Firestore document
+        await deleteDoc(userDocRef);
+
+        // Step 2: Delete the user from Firebase Authentication
+        await deleteUser(user);
+    } catch (error) {
+        console.error("Error deleting account:", error);
+        // If deleting the user fails, we should ideally re-create their document
+        // This can happen if the auth token needs refreshing (requires-recent-login)
+        const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'delete',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+        
+        // Re-throw the original error to be handled by the UI
         throw error;
     }
 };

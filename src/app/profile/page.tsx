@@ -4,9 +4,9 @@ import { useState } from 'react';
 import PageTitle from '@/components/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn, LogOut, UserPlus, BarChart, Lock, Mail } from 'lucide-react';
+import { LogIn, LogOut, UserPlus, BarChart, Lock, Mail, Trash2 } from 'lucide-react';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { signInWithEmail, signUpWithEmail, signOutUser, sendPasswordReset, signInWithGoogle, signInWithApple, resendVerificationEmail } from '@/firebase/auth/auth-service';
+import { signInWithEmail, signUpWithEmail, signOutUser, sendPasswordReset, signInWithGoogle, signInWithApple, resendVerificationEmail, deleteCurrentUserAccount } from '@/firebase/auth/auth-service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { collection, query, orderBy } from 'firebase/firestore';
@@ -359,6 +359,7 @@ const ProfilePage = () => {
   const firestore = useFirestore();
   const { toast } = useToast();
   const [resendLoading, setResendLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const resultsQuery = useMemoFirebase(() => {
     if (!user || !firestore) return null;
@@ -386,6 +387,30 @@ const ProfilePage = () => {
         console.error(error);
     } finally {
         setResendLoading(false);
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true);
+    try {
+        await deleteCurrentUserAccount();
+        toast({
+            title: "تم حذف الحساب",
+            description: "تم حذف حسابك وبياناتك بنجاح.",
+        });
+    } catch(error: any) {
+        console.error("Account deletion error: ", error);
+        let description = "فشل حذف الحساب. يرجى المحاولة مرة أخرى.";
+        if (error.code === 'auth/requires-recent-login') {
+            description = "هذه عملية حساسة. يرجى تسجيل الخروج ثم إعادة تسجيل الدخول مرة أخرى قبل محاولة حذف حسابك."
+        }
+        toast({
+            variant: 'destructive',
+            title: "حدث خطأ",
+            description: description,
+        });
+    } finally {
+        setDeleteLoading(false);
     }
   }
 
@@ -482,10 +507,34 @@ const ProfilePage = () => {
                   <p className="text-muted-foreground">لم تكمل أي تمارين بعد. اذهب إلى صفحة التمارين وابدأ!</p>
                 )}
             </div>
-            <Button variant="outline" onClick={signOutUser}>
-                <LogOut className="w-5 h-5 ml-2" />
-                تسجيل الخروج
-            </Button>
+            <div className="pt-6 border-t border-destructive/20 flex flex-wrap gap-4 justify-between items-center">
+                 <Button variant="outline" onClick={signOutUser}>
+                    <LogOut className="w-5 h-5 ml-2" />
+                    تسجيل الخروج
+                </Button>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button variant="destructive" disabled={deleteLoading}>
+                            <Trash2 className="w-5 h-5 ml-2" />
+                            {deleteLoading ? 'جاري الحذف...' : 'حذف الحساب'}
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>هل أنت متأكد تمامًا؟</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                هذا الإجراء لا يمكن التراجع عنه. سيتم حذف حسابك نهائيًا وإزالة جميع بياناتك من خوادمنا.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDeleteAccount} className='bg-destructive hover:bg-destructive/90'>
+                                نعم، احذف حسابي
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
         </CardContent>
       </Card>
     </div>
