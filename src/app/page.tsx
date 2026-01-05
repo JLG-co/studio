@@ -22,12 +22,12 @@ const features = [
     description: 'تحدَّ نفسك مع مسائل صعبة من مسابقات الرياضيات لتعزيز مهاراتك.',
     href: '/olympiad',
   },
-  {
-    icon: <BrainCircuit className="w-8 h-8 text-primary" />,
-    title: 'التعلم التكيفي',
-    description: 'مسار تعليمي مخصص يعتمد على أدائك ويقترح عليك الدروس والتمارين المناسبة لك.',
-    href: '/adaptive-learning',
-  },
+  // { // Removed for static build
+  //   icon: <BrainCircuit className="w-8 h-8 text-primary" />,
+  //   title: 'التعلم التكيفي',
+  //   description: 'مسار تعليمي مخصص يعتمد على أدائك ويقترح عليك الدروس والتمارين المناسبة لك.',
+  //   href: '/adaptive-learning',
+  // },
   {
     icon: <FlaskConical className="w-8 h-8 text-primary" />,
     title: "مختبر الحساب",
