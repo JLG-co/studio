@@ -26,27 +26,33 @@ const appleProvider = new OAuthProvider('apple.com');
 const createUserProfileDocument = async (user: User) => {
   if (!firestore) return;
   const userDocRef = doc(firestore, 'users', user.uid);
+  
+  // Prepare the data to be written.
+  // Using setDoc with { merge: true } will create the doc if it doesn't exist,
+  // or update it if it does. This is more robust.
+  const profileData = {
+    id: user.uid,
+    displayName: user.displayName,
+    email: user.email,
+    avatarUrl: user.photoURL || `https://picsum.photos/seed/${user.uid}/100/100`,
+    lastLogin: serverTimestamp(),
+  };
+
+  // Check if the document exists to add 'createdAt' and initial 'score' only once.
   const userDoc = await getDoc(userDocRef);
-
   if (!userDoc.exists()) {
-    const profileData = {
-      id: user.uid,
-      displayName: user.displayName,
-      email: user.email,
-      createdAt: serverTimestamp(),
-      score: 0,
-      avatarUrl: user.photoURL || `https://picsum.photos/seed/${user.uid}/100/100`,
-    };
-
-    setDoc(userDocRef, profileData).catch(async (serverError) => {
-      const permissionError = new FirestorePermissionError({
-        path: userDocRef.path,
-        operation: 'create',
-        requestResourceData: profileData,
-      });
-      errorEmitter.emit('permission-error', permissionError);
-    });
+    (profileData as any).createdAt = serverTimestamp();
+    (profileData as any).score = 0;
   }
+
+  setDoc(userDocRef, profileData, { merge: true }).catch(async (serverError) => {
+    const permissionError = new FirestorePermissionError({
+      path: userDocRef.path,
+      operation: 'write', // 'write' covers both create and update
+      requestResourceData: profileData,
+    });
+    errorEmitter.emit('permission-error', permissionError);
+  });
 }
 
 export const signInWithGoogle = async () => {
@@ -107,7 +113,10 @@ export const signInWithEmail = async (email: string, password: string) => {
   if (!auth) {
     throw new Error('Firebase not initialized');
   }
-  return signInWithEmailAndPassword(auth, email, password);
+  const result = await signInWithEmailAndPassword(auth, email, password);
+  // Also update profile on email sign-in
+  await createUserProfileDocument(result.user);
+  return result;
 };
 
 
