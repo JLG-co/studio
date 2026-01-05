@@ -19,7 +19,7 @@ export async function getAdaptiveLearningPath(input: AdaptiveLearningInput): Pro
 
 const adaptiveLearningPrompt = ai.definePrompt({
     name: 'adaptiveLearningPrompt',
-    model: 'googleai/gemini-1.5-pro-latest',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: AdaptiveLearningInputSchema },
     output: { schema: AdaptiveLearningOutputSchema },
     prompt: `You are an expert AI learning coach for a high school math application. Your goal is to create a personalized learning path based on a student's recent performance. All output must be in Arabic.
