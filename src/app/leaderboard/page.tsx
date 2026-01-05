@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Crown, LogIn, Medal, Trophy, CheckCircle, ArrowUpDown } from 'lucide-react';
-import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { useUser, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -140,11 +140,6 @@ const LeaderboardPage = () => {
                         النقاط <ArrowUpDown className="w-4 h-4" />
                     </div>
                 </TableHead>
-                 <TableHead className="text-right">
-                    <div className="flex items-center gap-2 cursor-pointer">
-                        المعدل <ArrowUpDown className="w-4 h-4" />
-                    </div>
-                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -153,13 +148,9 @@ const LeaderboardPage = () => {
                   <TableCell><Skeleton className='h-8 w-8' /></TableCell>
                   <TableCell><div className='flex items-center gap-4'><Skeleton className='h-10 w-10 rounded-full' /><Skeleton className='h-6 w-32' /></div></TableCell>
                   <TableCell><Skeleton className='h-6 w-16' /></TableCell>
-                  <TableCell><Skeleton className='h-6 w-16' /></TableCell>
                 </TableRow>
               ))}
               {!loading && users && users.map((u, index) => {
-                const totalPossiblePoints = (users.length - index) * 10;
-                const average = totalPossiblePoints > 0 ? (u.score / totalPossiblePoints) * 100 : 0;
-
                 return (
                 <TableRow
                   key={u.id}
@@ -188,9 +179,6 @@ const LeaderboardPage = () => {
                   </TableCell>
                   <TableCell className="text-right font-bold text-lg text-primary">
                     {u.score?.toLocaleString() || 0}
-                  </TableCell>
-                   <TableCell className="text-right font-bold text-lg text-cyan-400">
-                    {average.toFixed(2)}%
                   </TableCell>
                 </TableRow>
               )})}
