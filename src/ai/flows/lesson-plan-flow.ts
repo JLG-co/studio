@@ -21,6 +21,7 @@ export async function generateLessonPlan(input: LessonPlanInput): Promise<Lesson
 
 const lessonPlanPrompt = ai.definePrompt({
     name: 'lessonPlanPrompt',
+    model: 'googleai/gemini-1.5-pro-latest',
     input: { schema: LessonPlanInputSchema },
     output: { schema: LessonPlanOutputSchema },
     prompt: `You are an expert high school math teacher. Your task is to create a detailed lesson plan in ARABIC for the given topic. The lesson plan should be structured in Markdown format.

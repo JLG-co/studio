@@ -20,6 +20,7 @@ export async function analyzeFunctionProperties(input: FunctionAnalysisInput): P
 
 const functionAnalysisPrompt = ai.definePrompt({
     name: 'functionAnalysisPrompt',
+    model: 'googleai/gemini-1.5-pro-latest',
     input: { schema: FunctionAnalysisInputSchema },
     output: { schema: FunctionAnalysisOutputSchema },
     prompt: `You are an expert mathematician AI. Your task is to analyze a given function f(x) over a specified domain and produce a detailed analysis and a variation table (tableau de variation). All output text must be in Arabic.

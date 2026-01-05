@@ -21,6 +21,7 @@ export async function summarizeArticle(input: ArticleSummarizerInput): Promise<A
 
 const articleSummarizerPrompt = ai.definePrompt({
     name: 'articleSummarizerPrompt',
+    model: 'googleai/gemini-1.5-pro-latest',
     input: { schema: ArticleSummarizerInputSchema },
     output: { schema: ArticleSummarizerOutputSchema },
     prompt: `You are an expert academic assistant specializing in summarizing scientific texts for high school students. You will be given the text of an article. Your task is to analyze the text and provide a summary and key points in ARABIC.
