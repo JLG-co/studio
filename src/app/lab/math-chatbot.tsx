@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect, FormEvent } from 'react';
 import { useUser } from '@/firebase';
-import { mathChat, MathChatInput } from '@/ai/flows/math-chat-flow';
+import { mathChat } from '@/ai/flows/math-chat-flow';
+import { type MathChatInput } from '@/ai/flows/types';
 import { Button } from '@/components/ui/button';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';

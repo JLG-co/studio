@@ -3,23 +3,15 @@
  * @fileOverview An AI flow for summarizing scientific articles.
  *
  * - summarizeArticle - A function that takes article text and returns a summary.
- * - ArticleSummarizerInput - The input type for the summarizeArticle function.
- * - ArticleSummarizerOutput - The return type for the summarizeArticle function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-
-export const ArticleSummarizerInputSchema = z.object({
-  articleText: z.string().describe('The full text of the scientific article to be summarized.'),
-});
-export type ArticleSummarizerInput = z.infer<typeof ArticleSummarizerInputSchema>;
-
-export const ArticleSummarizerOutputSchema = z.object({
-  summary: z.string().describe('A concise summary of the article in a single paragraph. This should be in Arabic.'),
-  keyPoints: z.array(z.string()).describe('A list of the most important key points or findings from the article. This should be in Arabic.'),
-});
-export type ArticleSummarizerOutput = z.infer<typeof ArticleSummarizerOutputSchema>;
+import {
+  ArticleSummarizerInputSchema,
+  ArticleSummarizerOutputSchema,
+  type ArticleSummarizerInput,
+  type ArticleSummarizerOutput,
+} from './types';
 
 
 export async function summarizeArticle(input: ArticleSummarizerInput): Promise<ArticleSummarizerOutput> {

@@ -6,7 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, BrainCircuit, Newspaper } from "lucide-react";
-import { summarizeArticle, ArticleSummarizerInput, ArticleSummarizerOutput } from "@/ai/flows/article-summarizer-flow";
+import { summarizeArticle } from "@/ai/flows/article-summarizer-flow";
+import { type ArticleSummarizerInput, type ArticleSummarizerOutput } from "@/ai/flows/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
 

@@ -1,9 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PageTitle from '@/components/page-title';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
-import { getAdaptiveLearningPath, AdaptiveLearningInput, AdaptiveLearningOutput } from '@/ai/flows/adaptive-learning-flow';
+import { getAdaptiveLearningPath } from '@/ai/flows/adaptive-learning-flow';
+import { type AdaptiveLearningInput, type AdaptiveLearningOutput } from '@/ai/flows/types';
 import { Loader2, BrainCircuit, BookOpen, PencilRuler } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,7 @@ import { Badge } from '@/components/ui/badge';
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
 
 const AdaptiveLearningPage = () => {
-    const { user, loading: userLoading } = useUser();
+    const { user, isUserLoading: userLoading } = useUser();
     const firestore = useFirestore();
     
     const [plan, setPlan] = useState<AdaptiveLearningOutput | null>(null);

@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, BrainCircuit, LineChart, CheckCircle2 } from "lucide-react";
-import { analyzeFunctionProperties, FunctionAnalysisInput, FunctionAnalysisOutput } from "@/ai/flows/function-properties-flow";
+import { analyzeFunctionProperties } from "@/ai/flows/function-properties-flow";
+import { type FunctionAnalysisInput, type FunctionAnalysisOutput } from "@/ai/flows/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
 

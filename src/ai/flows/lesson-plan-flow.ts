@@ -3,23 +3,15 @@
  * @fileOverview An AI flow for generating lesson plans.
  *
  * - generateLessonPlan - A function that takes a topic and returns a detailed lesson plan.
- * - LessonPlanInput - The input type for the generateLessonPlan function.
- * - LessonPlanOutput - The return type for the generateLessonPlan function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-
-export const LessonPlanInputSchema = z.object({
-  topic: z.string().describe('The mathematical topic for which to generate a lesson plan.'),
-});
-export type LessonPlanInput = z.infer<typeof LessonPlanInputSchema>;
-
-export const LessonPlanOutputSchema = z.object({
-  title: z.string().describe('A suitable title for the lesson plan in Arabic.'),
-  content: z.string().describe('The full lesson plan content in Markdown format. This should be in Arabic and include sections for objectives, prerequisites, activities, and evaluation.'),
-});
-export type LessonPlanOutput = z.infer<typeof LessonPlanOutputSchema>;
+import {
+  LessonPlanInputSchema,
+  LessonPlanOutputSchema,
+  type LessonPlanInput,
+  type LessonPlanOutput,
+} from './types';
 
 
 export async function generateLessonPlan(input: LessonPlanInput): Promise<LessonPlanOutput> {

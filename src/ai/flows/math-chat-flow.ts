@@ -3,29 +3,15 @@
  * @fileOverview An AI flow for handling math-related chat conversations.
  *
  * - mathChat - A function that takes conversation history and a new query to generate a response.
- * - MathChatInput - The input type for the mathChat function.
- * - MathChatOutput - The return type for the mathChat function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-
-const MessageSchema = z.object({
-  role: z.enum(['user', 'bot']),
-  content: z.string(),
-});
-
-export const MathChatInputSchema = z.object({
-  history: z.array(MessageSchema).describe('The previous conversation history.'),
-  query: z.string().describe('The user\'s latest question or message.'),
-});
-export type MathChatInput = z.infer<typeof MathChatInputSchema>;
-
-export const MathChatOutputSchema = z.object({
-  answer: z.string().describe('The AI\'s response to the user\'s query, in Arabic and formatted in Markdown.'),
-});
-export type MathChatOutput = z.infer<typeof MathChatOutputSchema>;
-
+import {
+  MathChatInputSchema,
+  MathChatOutputSchema,
+  type MathChatInput,
+  type MathChatOutput,
+} from './types';
 
 export async function mathChat(input: MathChatInput): Promise<MathChatOutput> {
   return mathChatFlow(input);

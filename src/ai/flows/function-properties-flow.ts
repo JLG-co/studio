@@ -3,27 +3,15 @@
  * @fileOverview An AI agent for analyzing mathematical function properties.
  *
  * - analyzeFunctionProperties - A function that analyzes a given function string.
- * - FunctionAnalysisInput - The input type for the analyzeFunctionProperties function.
- * - FunctionAnalysisOutput - The return type for the analyzeFunctionProperties function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-
-export const FunctionAnalysisInputSchema = z.object({
-  functionStr: z.string().describe('The mathematical function to analyze, as a string. e.g., "x^3 - 3*x + 2"'),
-  domainStr: z.string().describe('The domain over which to analyze the function, as a string. e.g., "[-2, 2]" or "R"'),
-});
-export type FunctionAnalysisInput = z.infer<typeof FunctionAnalysisInputSchema>;
-
-export const FunctionAnalysisOutputSchema = z.object({
-    analysis: z.array(z.string()).describe('A step-by-step analysis of the function in Arabic, including calculating the derivative, finding critical points, and determining intervals of increase/decrease.'),
-    variationTable: z.object({
-        headers: z.array(z.string()).describe('The headers for the variation table. Typically ["x", "f\'(x)", "f(x)"].'),
-        rows: z.array(z.array(z.string())).describe('The rows of the variation table, where each inner array represents a row.'),
-    }).describe('A structured representation of the function\'s variation table (tableau de variation).'),
-});
-export type FunctionAnalysisOutput = z.infer<typeof FunctionAnalysisOutputSchema>;
+import {
+  FunctionAnalysisInputSchema,
+  FunctionAnalysisOutputSchema,
+  type FunctionAnalysisInput,
+  type FunctionAnalysisOutput,
+} from './types';
 
 export async function analyzeFunctionProperties(input: FunctionAnalysisInput): Promise<FunctionAnalysisOutput> {
   return functionAnalysisFlow(input);
