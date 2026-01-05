@@ -35,12 +35,6 @@ const features = [
     href: "/articles",
   },
   {
-    icon: <BrainCircuit className="w-8 h-8 text-primary" />,
-    title: "التعلم التكيفي",
-    description: "أداة ذكاء اصطناعي تقترح عليك موارد لتقوية نقاط ضعفك.",
-    href: "/adaptive-learning",
-  },
-  {
     icon: <ScrollText className="w-8 h-8 text-primary" />,
     title: 'آخر التحديثات',
     description: 'اكتشف الميزات الجديدة والإصلاحات والتحسينات في التطبيق.',
@@ -95,5 +89,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

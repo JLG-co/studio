@@ -24,7 +24,6 @@ const mainNavLinks = [
 
 const dropdownLinks = [
   { href: '/leaderboard', label: 'المتصدرون' },
-  { href: '/adaptive-learning', label: 'التعلم التكيفي' },
   { href: '/articles', label: 'المقالات' },
   { href: '/changelog', label: 'التحديثات' },
   { href: '/about', label: 'عن المطور' },
