@@ -7,12 +7,6 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
-
-type PageProps<T extends Record<string, string> = {}> = {
-  params: T;
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 type ArticlePageProps = {
   params: {
     slug: string;
@@ -27,7 +21,7 @@ export async function generateStaticParams() {
 
 const glassCardClasses = 'bg-white/5 backdrop-blur-lg border border-cyan-300/10 rounded-2xl shadow-lg';
 
-const ArticlePage = ({ params }: PageProps<ArticlePageProps['params']>) => {
+const ArticlePage = ({ params }: ArticlePageProps) => {
   const article = articles.find((a) => a.slug === params.slug);
 
   if (!article) {
