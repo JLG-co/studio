@@ -22,6 +22,4 @@ if (!process.env.GEMINI_API_KEY) {
 // Genkit will automatically look for the GEMINI_API_KEY in the environment variables.
 export const ai = genkit({
   plugins: [googleAI()],
-  logLevel: 'debug',
-  enableTracing: true,
 });
