@@ -6,6 +6,8 @@ import Header from '@/components/header';
 import KineticBackground from '@/components/kinetic-background';
 import Footer from '@/components/footer';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: 'Math Companion Pro',
@@ -39,6 +41,8 @@ export default function RootLayout({
           </div>
           <Toaster />
         </FirebaseClientProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
