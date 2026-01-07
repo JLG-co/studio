@@ -66,5 +66,3 @@ const LessonPage = ({ params }: LessonPageProps) => {
 };
 
 export default LessonPage;
-
-    
